@@ -21,56 +21,6 @@
 
 <body>
 
-
-    <!-- fixed navbar for use in admin section of app -->
-    <nav th:fragment="adminNavbar(highlightDirectory, highlightCourses, highlightAddCourse, highlightAddStudent)" class="navbar navbar-inverse navbar-fixed-top card-3">
-        <div class="container">
-
-            <div class="navbar-header">
-                <!-- hamburger menu only shows if width < 992px -->
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#adminnavbar">
-                    <!-- make a basic hamburger icon from 3 bars -->
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-
-                <!-- TODO make a new github repo and change this link -->
-                <a class="navbar-brand" href="https://github.com/nmerris/StudentResumeBotTwo">STUDENT PRO 5K</a>
-            </div><!-- navbar header -->
-
-            <div class="navbar-collapse collapse" id="adminnavbar">
-
-                <ul class="nav navbar-nav">
-                    <li th:classappend="${highlightDirectory ? 'active' : ''}">
-                        <a th:href="@{~/studentdirectory}"><span class="glyphicon glyphicon-list"></span>Students</a>
-                    </li>
-                    <li th:classappend="${highlightAddStudent ? 'active' : ''}">
-                        <a th:href="@{~/addstudent}"><span class="glyphicon glyphicon-plus"></span>Student</a>
-                    </li>
-                    <li th:classappend="${highlightCourses ? 'active' : ''}">
-                        <a th:href="@{~/courselist}"><span class="glyphicon glyphicon-list"></span>Courses</a>
-                    </li>
-
-                    <li th:classappend="${highlightAddCourse ? 'active' : ''}">
-                        <a th:href="@{~/addcourse}"><span class="glyphicon glyphicon-plus"></span>Course</a>
-                    </li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a th:href="@{~/loaddummydata}"><span class="glyphicon glyphicon-open-file"></span>Load</a>
-                    </li>
-                    <li>
-                        <a th:href="@{~/logout}"><span class="glyphicon glyphicon-user"></span>Logout</a>
-                    </li>
-                </ul>
-
-            </div><!-- navbar-collapse -->
-        </div><!-- container -->
-    </nav>
-
-
     <!-- Fixed navbar for use in resume section of app -->
     <!-- navState is passed in from each page that uses navbar, it allows navbar to know which links to highlight, -->
     <!-- which links to disable, and what number to put in each badge -->
