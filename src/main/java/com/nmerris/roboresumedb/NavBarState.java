@@ -1,4 +1,4 @@
-package com.nmerris.roboresumedb.models;
+package com.nmerris.roboresumedb;
 
 public class NavBarState {
 

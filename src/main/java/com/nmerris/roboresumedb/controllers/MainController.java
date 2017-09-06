@@ -1,6 +1,7 @@
 package com.nmerris.roboresumedb.controllers;
 
 import com.nmerris.roboresumedb.CurrPerson;
+import com.nmerris.roboresumedb.NavBarState;
 import com.nmerris.roboresumedb.Utilities;
 import com.nmerris.roboresumedb.models.*;
 import com.nmerris.roboresumedb.repositories.*;
@@ -12,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
 
 
 @Controller
@@ -46,9 +46,9 @@ public class MainController {
     // go through the login route first, then Spring will automatically take them to addperson
     @GetMapping("/")
     public String indexPageGet() {
-        // TODO might be nice to show the count of job postings, persons, recruiters in 'welcome/index' page
+        // TODO might be nice to show the count of job postings, persons, recruiters in 'welcome/login' page
 
-        return "index";
+        return "login";
     }
 
 
