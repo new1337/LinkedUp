@@ -38,40 +38,40 @@ public class Person implements Comparable<Person> {
     @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.EAGER)
     private Set<Skill> skills;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Course> courses;
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    private Set<Course> courses;
 
     public Person() {
         setEducationAchievements(new HashSet<>());
         setWorkExperiences(new HashSet<>());
         setSkills(new HashSet<>());
-        setCourses(new HashSet<>());
+//        setCourses(new HashSet<>());
     }
 
 
-    // call this to add a set of Course to this Person, then save person to personRepo
-    public void addCourses(Collection<Course> courseCollection) {
-        courses.addAll(courseCollection);
-    }
-
-    // add a single course
-    public void addCourse(Course course) {
-        courses.add(course);
-    }
-
-    // call this to remove a set of courses from this person, then save person to personRepo
-    public void removeCourses(Collection<Course> courseCollection) {
-        courses.removeAll(courseCollection);
-    }
-
-    public void removeCourse(Course course) {
-        courses.remove(course);
-    }
-
-    // call this to remove all courses from person
-    public void removeAllCourses() {
-        courses.clear();
-    }
+//    // call this to add a set of Course to this Person, then save person to personRepo
+//    public void addCourses(Collection<Course> courseCollection) {
+//        courses.addAll(courseCollection);
+//    }
+//
+//    // add a single course
+//    public void addCourse(Course course) {
+//        courses.add(course);
+//    }
+//
+//    // call this to remove a set of courses from this person, then save person to personRepo
+//    public void removeCourses(Collection<Course> courseCollection) {
+//        courses.removeAll(courseCollection);
+//    }
+//
+//    public void removeCourse(Course course) {
+//        courses.remove(course);
+//    }
+//
+//    // call this to remove all courses from person
+//    public void removeAllCourses() {
+//        courses.clear();
+//    }
 
     // in order to delete an ed, you must first remove it from it's parents collection
     public void removeEdAchievement(EducationAchievement ea) {
@@ -97,15 +97,6 @@ public class Person implements Comparable<Person> {
 
     public void removeAllSkills() {
         skills.clear();
-    }
-
-
-    public Set<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
     }
 
     public Set<WorkExperience> getWorkExperiences() {
