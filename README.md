@@ -11,3 +11,7 @@ To see the app live on heroku:
 https://gentle-chamber-81023.herokuapp.com/
 
 username: user, password: pass
+
+TO MANUALLY INSERT ROLES INTO DB:
+INSERT INTO ROLE VALUES(1, 'USER');
+INSERT INTO ROLE VALUES(2, 'LIBRARIAN');
