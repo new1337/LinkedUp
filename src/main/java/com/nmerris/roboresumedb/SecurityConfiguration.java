@@ -43,6 +43,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().httpBasic() // allows authentication in the URL itself
                 // go back to the login page after user logs out
                 .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
+
+
+        // use                 .formLogin().failureUrl("/login?error") to easily handle login errors
+
     }
 
     @Override
