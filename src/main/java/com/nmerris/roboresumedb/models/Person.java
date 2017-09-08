@@ -47,8 +47,11 @@ public class Person implements Comparable<Person> {
     @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.EAGER)
     private Set<Skill> skills;
 
+    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Job> jobs;
+
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
     public Person() {
@@ -56,9 +59,11 @@ public class Person implements Comparable<Person> {
         workExperiences = new HashSet<>();
         skills = new HashSet<>();
         roles = new HashSet<>();
+        jobs = new HashSet<>();
     }
 
 
+    // just compare by ids, could compare with anything we want
     @Override
     public int compareTo(Person other) {
         return Long.compare(this.getId(), other.getId());
@@ -116,6 +121,23 @@ public class Person implements Comparable<Person> {
         this.educationAchievements = educationAchievements;
     }
 
+    public Set<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(Set<Job> jobs) {
+        this.jobs = jobs;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+
     public String getNameFirst() {
         return nameFirst;
     }
@@ -146,14 +168,6 @@ public class Person implements Comparable<Person> {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Collection<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(HashSet<Role> roles) {
-        this.roles = roles;
     }
 
     public String getPassword() {

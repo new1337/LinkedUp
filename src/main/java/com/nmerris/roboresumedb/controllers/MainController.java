@@ -52,6 +52,44 @@ public class MainController {
     }
 
 
+    @GetMapping("/register")
+    public String registerGet(Model model) {
+        model.addAttribute("newPerson", new Person());
+        return "register";
+    }
+
+
+    @PostMapping("/register")
+    public String processRegistration(@RequestParam(value = "selectedRole") String role,
+                                      @Valid @ModelAttribute("newPerson") Person user,
+                                      BindingResult bindingResult,
+                                      Model model) {
+
+        System.out.println("####################### /register POST... incoming role String is: " + role);
+
+        // always add the incoming user back to the model
+        model.addAttribute("newPerson", user);
+
+        if(bindingResult.hasErrors()) {
+            return "registration";
+        }
+        else {
+            if(role.equals("ROLE_USER")) {
+                userService.saveUser(user);
+                model.addAttribute("message", "ROLE_USER account successfully created!");
+            }
+            else {
+                userService.saveRecruiter(user);
+                model.addAttribute("message", "ROLE_RECRUITER account successfully created!");
+            }
+        }
+
+        // need this to compile, should never happen
+        return "redirect:/index";
+
+    }
+
+
     // wipes all the skills, work experiences, and eds from current Person
     @GetMapping("/startover")
     // Transactional is necessary to call removeAllBy.. on the repos

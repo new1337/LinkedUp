@@ -34,14 +34,14 @@ public class Job {
     @NotEmpty
     private String description;
 
-    // one job can have many skills
+    // one job can have many skills, so job 'is parent of' skills
     @OneToMany(mappedBy = "myJob", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Skill> skills;
 
-    // many jobs can belong to one recruiter
+    // many jobs can belong to one person
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "recruiter_id")
-    private Recruiter myRecruiter;
+    @JoinColumn(name = "person_id")
+    private Person myPerson;
 
 
 
@@ -102,11 +102,11 @@ public class Job {
         this.skills = skills;
     }
 
-    public Recruiter getMyRecruiter() {
-        return myRecruiter;
+    public Person getMyPerson() {
+        return myPerson;
     }
 
-    public void setMyRecruiter(Recruiter myRecruiter) {
-        this.myRecruiter = myRecruiter;
+    public void setMyPerson(Person myPerson) {
+        this.myPerson = myPerson;
     }
 }

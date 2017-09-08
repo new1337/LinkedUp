@@ -1,4 +1,4 @@
-package com.nmerris.roboresumedb;
+package com.nmerris.roboresumedb.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

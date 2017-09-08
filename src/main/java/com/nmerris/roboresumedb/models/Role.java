@@ -18,13 +18,13 @@ public class Role {
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Collection<Person> persons;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Collection<Recruiter> recruiters;
+//    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+//    private Collection<Recruiter> recruiters;
 
 
     public Role() {
         persons = new HashSet<>();
-        recruiters = new HashSet<>();
+//        recruiters = new HashSet<>();
     }
 
     // useful for debugging, remove for production
@@ -51,21 +51,21 @@ public class Role {
         this.persons.removeAll(users);
     }
 
-    public void addRecruiter(Recruiter recruiter) {
-        recruiters.add(recruiter);
-    }
-
-    public void removeRecruiter(Recruiter recruiter) {
-        recruiters.remove(recruiter);
-    }
-
-    public void addRecruiters(HashSet<Recruiter> recruiters) {
-        this.recruiters.addAll(recruiters);
-    }
-
-    public void removeRecruiters(HashSet<Recruiter> recruiters) {
-        this.recruiters.removeAll(recruiters);
-    }
+//    public void addRecruiter(Recruiter recruiter) {
+//        recruiters.add(recruiter);
+//    }
+//
+//    public void removeRecruiter(Recruiter recruiter) {
+//        recruiters.remove(recruiter);
+//    }
+//
+//    public void addRecruiters(HashSet<Recruiter> recruiters) {
+//        this.recruiters.addAll(recruiters);
+//    }
+//
+//    public void removeRecruiters(HashSet<Recruiter> recruiters) {
+//        this.recruiters.removeAll(recruiters);
+//    }
 
 
     // normal getters/setters
@@ -93,13 +93,13 @@ public class Role {
         this.persons = users;
     }
 
-    public Collection<Recruiter> getRecruiters() {
-        return recruiters;
-    }
-
-    public void setRecruiters(HashSet<Recruiter> recruiters) {
-        this.recruiters = recruiters;
-    }
+//    public Collection<Recruiter> getRecruiters() {
+//        return recruiters;
+//    }
+//
+//    public void setRecruiters(HashSet<Recruiter> recruiters) {
+//        this.recruiters = recruiters;
+//    }
 
 
 }

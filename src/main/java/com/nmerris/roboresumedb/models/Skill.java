@@ -20,7 +20,7 @@ public class Skill {
     private String rating;
 
     // many skills can belong to one person
-    // either job_id or person_id is going to be null in EVERY entry in this table
+    // probably either job_id or person_id is going to be null in every entry in this table
     // because a skill will only ever be attached to a person or job, but never both at the same time
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
