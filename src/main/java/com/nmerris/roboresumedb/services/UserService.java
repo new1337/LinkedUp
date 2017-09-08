@@ -20,6 +20,7 @@ public class UserService {
         this.personRepo = personRepo;
     }
 
+
     public Person findByUsername(String username) {
         return personRepo.findByUsername(username);
     }
@@ -46,9 +47,9 @@ public class UserService {
     public void saveRecruiter(Person user) {
         System.out.println("============================= UserService.saveRecruiter, just got user.username: " + user.getUsername());
 
-        user.addRole(roleRepo.findByRole("ROLE_ADMIN"));
+        user.addRole(roleRepo.findByRole("ROLE_RECRUITER"));
         // overrode toString in Role, so should print out role string here
-        System.out.println("=================== adding role to user: " + roleRepo.findByRole("ROLE_ADMIN"));
+        System.out.println("=================== adding role to user: " + roleRepo.findByRole("ROLE_RECRUITER"));
         user.setEnabled(true);
         personRepo.save(user);
         System.out.println("=================== just saved user to repo");

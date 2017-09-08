@@ -5,6 +5,7 @@ import com.nmerris.roboresumedb.NavBarState;
 import com.nmerris.roboresumedb.Utilities;
 import com.nmerris.roboresumedb.models.*;
 import com.nmerris.roboresumedb.repositories.*;
+import com.nmerris.roboresumedb.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +28,12 @@ public class MainController {
     @Autowired
     WorkExperienceRepo workExperienceRepo;
 
+    // TODO: not going to be using this anymore
     @Autowired
     CurrPerson currPerson;
+
+    @Autowired
+    UserService userService;
 
 
     @GetMapping("/login")
@@ -79,6 +84,7 @@ public class MainController {
                 model.addAttribute("message", "ROLE_USER account successfully created!");
             }
             else {
+                // must be ROLE_RECRUITER
                 userService.saveRecruiter(user);
                 model.addAttribute("message", "ROLE_RECRUITER account successfully created!");
             }

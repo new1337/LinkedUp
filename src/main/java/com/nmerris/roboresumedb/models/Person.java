@@ -70,6 +70,16 @@ public class Person implements Comparable<Person> {
     }
 
 
+    // add a single role to this Person
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    // remove a single role from this Person
+    public void removeRole(Role role) {
+        roles.remove(role);
+    }
+
 
     // in order to delete an ed, you must first remove it from it's parents collection
     public void removeEdAchievement(EducationAchievement ea) {
