@@ -25,7 +25,7 @@ public class EducationAchievement {
     private long graduationYear;
 
 //    @ManyToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL) ?necessary?
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType. LAZY)
     @JoinColumn(name = "person_id")
     private Person myPerson;
 

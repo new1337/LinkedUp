@@ -51,7 +51,6 @@ public class Job {
 //    @OneToMany(mappedBy = "myJob", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    private Set<Skill> skills;
 
-    // many jobs can belong to one person
     // Person is the owner of Job
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id")

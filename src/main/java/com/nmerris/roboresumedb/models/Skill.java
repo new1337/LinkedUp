@@ -19,16 +19,21 @@ public class Skill {
     @Column(unique = true)
     private String skill;
 
-    @NotEmpty
+//    @NotEmpty
     private String rating;
+
+    // Person owns Skill
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "person_id")
+    private Person myPerson;
 
     // Skill owns Job
     @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
     private Collection<Job> jobs;
 
-    // Skill also owns Person
-    @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
-    private Collection<Person> persons;
+
+//    @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
+//    private Collection<Person> persons;
 
 //
 //    public Job getMyJob() {
@@ -50,7 +55,7 @@ public class Skill {
 
     public Skill() {
         jobs = new HashSet<>();
-        persons = new HashSet<>();
+//        persons = new HashSet<>();
     }
 
 
@@ -86,11 +91,11 @@ public class Skill {
         this.jobs = jobs;
     }
 
-    public Collection<Person> getPersons() {
-        return persons;
+    public Person getMyPerson() {
+        return myPerson;
     }
 
-    public void setPersons(Collection<Person> persons) {
-        this.persons = persons;
+    public void setMyPerson(Person myPerson) {
+        this.myPerson = myPerson;
     }
 }

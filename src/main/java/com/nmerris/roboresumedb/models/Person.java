@@ -48,8 +48,8 @@ public class Person implements Comparable<Person> {
     @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     private Set<WorkExperience> workExperiences;
 
-//    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.EAGER)
-//    private Set<Skill> skills;
+    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.LAZY)
+    private Set<Skill> skills;
 
     // ????????????????? not sure about this mapping, think it's though
     @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -63,9 +63,9 @@ public class Person implements Comparable<Person> {
     private Collection<Role> roles;
 
     // Skill is owner of Person
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
-    private Collection<Skill> skills;
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
+//    private Collection<Skill> skills;
 
 
 
