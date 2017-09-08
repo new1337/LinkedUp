@@ -12,89 +12,47 @@
         <div class="panel panel-default card card-3">
             <div class="panel-body">
 
-                <!--<h3 th:text="${summaryBarTitle}"></h3>-->
-
-                <!-- shows counts of different parts of students resume -->
                 <div class="table-responsive">
                     <table class="table table-hover">
-                        <caption><h3><b>Resume Summary</b></h3></caption>
-
-                        <thead>
-                            <tr>
-                                <th>Section</th>
-                                <th>Entries</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td><p>Educational Achievements</p></td>
-                                <td><p th:text="${numEds}"></p></td>
-                            </tr>
-                            <tr>
-                                <td><p>Work Experiences</p></td>
-                                <td><p th:text="${numWorkExps}"></p></td>
-                            </tr>
-                            <tr>
-                                <td><p>Skills</p></td>
-                                <td><p th:text="${numSkills}"></p></td>
-                            </tr>
-                        </tbody>
-
-                        <tfoot>
-                            <tr>
-                                <td><p><b>Total Entries</b></p></td>
-                                <td>
-                                    <div th:with="sum=${numEds + numWorkExps + numSkills}">
-                                        <p th:text="${sum}"></p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tfoot>
-
-                    </table>
-                </div>
-                <!-- go to resume edit details page to edti resume details -->
-                <!-- the currPerson session variable has already been set, so no need for any path variables -->
-                <a class="btn btn-primary bold-input" th:href="@{~/editdetails}">Edit Resume</a>
-
-                <!-- table of courses student is registered in -->
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <caption><h3><b>Registered Courses</b></h3></caption>
+                        <caption><h3><b>Job Postings</b></h3></caption>
 
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Instructor</th>
-                                <th>Credits</th>
+                                <th>Employer</th>
+                                <th>MinSalary</th>
+                                <th>Description</th>
+                                <th>Skills</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            <th:block th:each="item:${#lists.sort(courses)}">
-                            <!--<th:block th:each="item:${courses}">-->
-                                <tr>
-                                    <td><p th:text="${item.title}"></p></td>
-                                    <td><p th:text="${item.instructor}"></p></td>
-                                    <td><p th:text="${item.credits}"></p></td>
-                                </tr>
+                            <th:block th:each="item:${person.jobs}">
+                                <td th:text="item.title"></td>
+                                <td th:text="item.employer"></td>
+                                <td th:text="item.minSalary"></td>
+                                <td th:text="item.description"></td>
+
+                                <!-- ??????????????????????????????? -->
+                                <th:block th:each="askill:${item.skills}">
+                                    <td th:text="askill.skill"></td>
+                                </th:block>
                             </th:block>
                         </tbody>
 
-                        <tfoot>
-                        <tr>
-                            <td colspan="2"><p><b>Total Credits</b></p></td>
-                            <td>
-                                <p th:text="${sumCredits}"></p>
-                            </td>
-                        </tr>
-                        </tfoot>
+                        <!--<tfoot>-->
+                            <!--<tr>-->
+                                <!--<td><p><b>Total Entries</b></p></td>-->
+                                <!--<td>-->
+                                    <!--<div th:with="sum=${numEds + numWorkExps + numSkills}">-->
+                                        <!--<p th:text="${sum}"></p>-->
+                                    <!--</div>-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                        <!--</tfoot>-->
 
                     </table>
                 </div>
-                <!-- the currPerson session variable has already been set, so no need for any path variables -->
-                <a class="btn btn-primary bold-input" th:href="@{~/studentregistration}">Edit Registration</a>
 
             </div><!-- panel-body -->
         </div>

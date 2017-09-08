@@ -87,7 +87,7 @@ public class Person implements Comparable<Person> {
     public String getRole() {
         for (Role r : roles) {
             if(r.getRole().equals("ROLE_USER")) return "ROLE_USER";
-            if(r.getRole().equals("ROLE_RECUITER")) return "ROLE_RECRUITER";
+            if(r.getRole().equals("ROLE_RECRUITER")) return "ROLE_RECRUITER";
             // COULD ADD ADMIN ROLE HERE
         }
         // should never happen

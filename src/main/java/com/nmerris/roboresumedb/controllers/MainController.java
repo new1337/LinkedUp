@@ -48,6 +48,41 @@ public class MainController {
     }
 
 
+
+    @GetMapping("/summary")
+    public String summary(Model model, Principal principal) {
+        System.out.println("=============================================================== just entered /summary GET");
+        System.out.println("=========================================== Principal.getName (username): " + principal.getName());
+        System.out.println("=========================================== personRepo.findByUserName.getUsername: " + personRepo.findByUsername(principal.getName()).getUsername());
+        System.out.println("=========================================== personRepo.findByUserName.getRole: " + personRepo.findByUsername(principal.getName()).getRole());
+
+//        model.addAttribute("numEds", educationRepo.countAllByMyPersonIs(p));
+//        model.addAttribute("numWorkExps", workExperienceRepo.countAllByMyPersonIs(p));
+//        model.addAttribute("numSkills", skillRepo.countAllByMyPersonIs(p));
+//        addPersonNameToModel(model);
+
+
+        // in this app, a Person can only ever have one role, and username is unique
+        // show them a summary page based on their role
+        switch(personRepo.findByUsername(principal.getName()).getRole()) {
+            case "ROLE_USER" :
+
+                return "summaryseeker";
+
+            case "ROLE_RECRUITER" :
+
+                model.addAttribute("person", personRepo.findByUsername(principal.getName()));
+                return "summaryrecruiter";
+        }
+
+
+
+        // should never happen
+        // TODO need a custom error page instead of redirecting randomly
+        return "redirect:/";
+    }
+
+
     @GetMapping("/logout")
     public String logout() {
         return "login";
@@ -100,7 +135,8 @@ public class MainController {
 
         // always need to login after registering
         // after successfully logging in, user will see their summary page via the /summary route
-        return "login";
+        return "redirect:/";
+//        return "login";
 
     }
 
@@ -590,35 +626,6 @@ public class MainController {
     }
 
 
-    @GetMapping("/summary")
-    public String summary(Model model, Principal principal) {
-        System.out.println("=============================================================== just entered /summary GET");
-        System.out.println("=========================================== Principal.getName: " + principal.getName());
-
-//        model.addAttribute("numEds", educationRepo.countAllByMyPersonIs(p));
-//        model.addAttribute("numWorkExps", workExperienceRepo.countAllByMyPersonIs(p));
-//        model.addAttribute("numSkills", skillRepo.countAllByMyPersonIs(p));
-//        addPersonNameToModel(model);
-
-
-        // in this app, a Person can only ever have one role, and username is unique
-        // show them a summary page based on their role
-        switch(personRepo.findByUsername(principal.getName()).getRole()) {
-            case "ROLE_USER" :
-
-                return "summaryseeker";
-
-            case "ROLE_RECRUITER" :
-
-                return "summaryrecruiter";
-        }
-
-
-
-        // should never happen
-        // TODO need a custom error page instead of redirecting randomly
-        return "redirect:/";
-    }
 
 
 

@@ -1,11 +1,15 @@
 package com.nmerris.roboresumedb.configs;
 
+import com.nmerris.roboresumedb.repositories.PersonRepo;
+import com.nmerris.roboresumedb.services.SSUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -13,21 +17,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    // uncommment this to disable security for testing
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .antMatchers("/**")
-//                .permitAll()
-//                .antMatchers("/add*", "/startover", "/editdetails", "/delete/*", "/update/*", "/finalresume")
-//                .access("hasRole('ROLE_USER')")
-//                .anyRequest()
-//                .authenticated()
-//                .and().formLogin().loginPage("/login")
-//                .permitAll()
-//                .and().httpBasic() // allows authentication in the URL itself
-//                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
-//    }
+    @Autowired
+    private SSUserDetailsService userDetailsService;
+
+    @Autowired
+    private PersonRepo personRepo;
+
+
+    @Override
+    public UserDetailsService userDetailsServiceBean() throws Exception {
+        return new SSUserDetailsService(personRepo);
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
