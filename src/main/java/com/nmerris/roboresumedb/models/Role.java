@@ -27,7 +27,7 @@ public class Role {
 //        recruiters = new HashSet<>();
     }
 
-    // useful for debugging, remove for production
+    // necessary! using this to compare a Person's role in some places
     @Override
     public String toString() {
         return role;

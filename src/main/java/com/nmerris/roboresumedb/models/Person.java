@@ -33,7 +33,10 @@ public class Person implements Comparable<Person> {
     @NotEmpty
     private String password;
 
+    // all usernames must be unique
+    // TODO handle error when this happens, must provide user feedback in register form
     @NotEmpty
+    @Column(unique = true)
     private String username;
 
     private boolean enabled;
@@ -69,7 +72,7 @@ public class Person implements Comparable<Person> {
         return Long.compare(this.getId(), other.getId());
     }
 
-
+    // helper/convenience methods =================================================================================
     // add a single role to this Person
     public void addRole(Role role) {
         roles.add(role);
@@ -80,7 +83,20 @@ public class Person implements Comparable<Person> {
         roles.remove(role);
     }
 
+    // this app only allows a Person to have one role
+    public String getRole() {
+        for (Role r : roles) {
+            if(r.getRole().equals("ROLE_USER")) return "ROLE_USER";
+            if(r.getRole().equals("ROLE_RECUITER")) return "ROLE_RECRUITER";
+            // COULD ADD ADMIN ROLE HERE
+        }
+        // should never happen
+        return null;
+    }
 
+
+
+    // normal getters/setters =================================================================================
     // in order to delete an ed, you must first remove it from it's parents collection
     public void removeEdAchievement(EducationAchievement ea) {
         educationAchievements.remove(ea);

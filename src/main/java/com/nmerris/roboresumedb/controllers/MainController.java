@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 
 @Controller
@@ -37,7 +38,12 @@ public class MainController {
 
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("message", "Please log in or register");
+
+        // after successfully logging in, user will see their summary page via the /summary route
+        // there is no login post route, it is never called, SecurityConfiguration class sets the default route
+        // after loggin in
         return "login";
     }
 
@@ -81,17 +87,20 @@ public class MainController {
         else {
             if(role.equals("ROLE_USER")) {
                 userService.saveUser(user);
-                model.addAttribute("message", "ROLE_USER account successfully created!");
             }
             else {
                 // must be ROLE_RECRUITER
                 userService.saveRecruiter(user);
-                model.addAttribute("message", "ROLE_RECRUITER account successfully created!");
             }
         }
 
-        // need this to compile, should never happen
-        return "redirect:/index";
+        // nice to have a message to confirm that registration was ok
+        model.addAttribute("message", "Thank you for registering "
+                + user.getNameFirst() + " " + user.getNameLast() + ", please log in");
+
+        // always need to login after registering
+        // after successfully logging in, user will see their summary page via the /summary route
+        return "login";
 
     }
 
@@ -581,24 +590,34 @@ public class MainController {
     }
 
 
-    @GetMapping("/summary/{id}")
-    public String summary(@PathVariable("id") long id, Model model) {
-        System.out.println("=============================================================== just entered /summary/{id} GET");
+    @GetMapping("/summary")
+    public String summary(Model model, Principal principal) {
+        System.out.println("=============================================================== just entered /summary GET");
+        System.out.println("=========================================== Principal.getName: " + principal.getName());
 
-        // set the current person id to the incoming path variable, which is the id of student that was just clicked
-        currPerson.setPersonId(id);
-        System.out.println("=========================================== just set currPerson.getPersonId(): " + currPerson.getPersonId());
+//        model.addAttribute("numEds", educationRepo.countAllByMyPersonIs(p));
+//        model.addAttribute("numWorkExps", workExperienceRepo.countAllByMyPersonIs(p));
+//        model.addAttribute("numSkills", skillRepo.countAllByMyPersonIs(p));
+//        addPersonNameToModel(model);
 
-        Person p = personRepo.findOne(id);
-        model.addAttribute("numEds", educationRepo.countAllByMyPersonIs(p));
-        model.addAttribute("numWorkExps", workExperienceRepo.countAllByMyPersonIs(p));
-        model.addAttribute("numSkills", skillRepo.countAllByMyPersonIs(p));
-        addPersonNameToModel(model);
 
-        String s = String.format("Student: %s %s - ID: %d", p.getNameFirst(), p.getNameLast(), p.getId());
-        model.addAttribute("summaryBarTitle", s);
+        // in this app, a Person can only ever have one role, and username is unique
+        // show them a summary page based on their role
+        switch(personRepo.findByUsername(principal.getName()).getRole()) {
+            case "ROLE_USER" :
 
-        return "summary";
+                return "summaryseeker";
+
+            case "ROLE_RECRUITER" :
+
+                return "summaryrecruiter";
+        }
+
+
+
+        // should never happen
+        // TODO need a custom error page instead of redirecting randomly
+        return "redirect:/";
     }
 
 
