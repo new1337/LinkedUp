@@ -38,9 +38,9 @@
                         <p class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
                     </div>
                     <div class="form-group">
-                        <label class="section-heading" for="email">Email</label>
-                        <input id="email" class="form-control" type="text" th:field="*{email}"/>
-                        <p class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+                        <label class="section-heading" for="password">Password</label>
+                        <input id="password" class="form-control" type="text" th:field="*{password}"/>
+                        <p class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
                     </div>
                     <div class="form-group">
                         <label class="section-heading" for="role">Account Type</label>

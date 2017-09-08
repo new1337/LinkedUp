@@ -2,6 +2,7 @@ package com.nmerris.roboresumedb;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -9,6 +10,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     // uncommment this to disable security for testing
@@ -29,30 +31,43 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                // always allow access to all our static folders
-                .antMatchers("/css/**", "/js/**", "/fonts/**", "/img/**")
+
+        http
+                .authorizeRequests()
+
+                // anyone can access
+                .antMatchers("/css/**", "/js/**", "/fonts/**", "/img/**", "/register", "/")
                     .permitAll()
+
                 .antMatchers("/add*", "/startover", "/editdetails", "/delete/*", "/update/*", "/finalresume",
                         "/course*", "/student*", "/summary")
                     .access("hasRole('ROLE_USER')")
-                .anyRequest()
-                    .authenticated()
-                .and().formLogin().loginPage("/login")
+                .anyRequest().authenticated();
+
+
+        // login/out
+        http
+                .formLogin().failureUrl("/login?error") // thymeleaf can conveniently pick up the login errors in the template
+                // there is NO post route for /login, I tried and it never gets called, instead the defaultSuccessUrl route gets called
+                .defaultSuccessUrl("/summary")
+                .and()
+                .formLogin().loginPage("/login")
                     .permitAll()
-                .and().httpBasic() // allows authentication in the URL itself
-                // go back to the login page after user logs out
-                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
+                .and()
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/loggedout")
+                    .permitAll();
 
+        http
+                .csrf().disable();
 
-        // use                 .formLogin().failureUrl("/login?error") to easily handle login errors
+        http
+                .headers().frameOptions().disable();
 
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().
-                withUser("user").password("pass").roles("USER");
+        auth.userDetailsService(userDetailsServiceBean());
     }
 
 }

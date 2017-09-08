@@ -48,7 +48,7 @@ public class MainController {
     public String indexPageGet() {
         // TODO might be nice to show the count of job postings, persons, recruiters in 'welcome/login' page
 
-        return "login";
+        return "welcome";
     }
 
 

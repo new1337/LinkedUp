@@ -13,5 +13,5 @@ https://gentle-chamber-81023.herokuapp.com/
 username: user, password: pass
 
 TO MANUALLY INSERT ROLES INTO DB:
-INSERT INTO ROLE VALUES(1, 'USER');
-INSERT INTO ROLE VALUES(2, 'LIBRARIAN');
+INSERT INTO role VALUES(1, 'ROLE_USER');
+INSERT INTO role VALUES(2, 'ROLE_RECRUITER');
