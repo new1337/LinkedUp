@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 public class Skill {
@@ -14,38 +16,50 @@ public class Skill {
 
     @NotEmpty
     @Size(max = 50)
+    @Column(unique = true)
     private String skill;
 
     @NotEmpty
     private String rating;
 
-    // many skills can belong to one person
-    // probably either job_id or person_id is going to be null in every entry in this table
-    // because a skill will only ever be attached to a person or job, but never both at the same time
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "person_id")
-    private Person myPerson;
+    // Skill owns Job
+    @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
+    private Collection<Job> jobs;
 
-    // may skills can also belong to one job
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "job_id")
-    private Job myJob;
+    // Skill also owns Person
+    @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
+    private Collection<Person> persons;
+
+//
+//    public Job getMyJob() {
+//        return myJob;
+//    }
+//
+//    public void setMyJob(Job myJob) {
+//        this.myJob = myJob;
+//    }
+//
+//    public Person getMyPerson() {
+//        return myPerson;
+//    }
+//
+//    public void setMyPerson(Person myPerson) {
+//        this.myPerson = myPerson;
+//    }
 
 
-    public Job getMyJob() {
-        return myJob;
+    public Skill() {
+        jobs = new HashSet<>();
+        persons = new HashSet<>();
     }
 
-    public void setMyJob(Job myJob) {
-        this.myJob = myJob;
+
+    public long getId() {
+        return id;
     }
 
-    public Person getMyPerson() {
-        return myPerson;
-    }
-
-    public void setMyPerson(Person myPerson) {
-        this.myPerson = myPerson;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getSkill() {
@@ -64,11 +78,19 @@ public class Skill {
         this.rating = rating;
     }
 
-    public long getId() {
-        return id;
+    public Collection<Job> getJobs() {
+        return jobs;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setJobs(Collection<Job> jobs) {
+        this.jobs = jobs;
+    }
+
+    public Collection<Person> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(Collection<Person> persons) {
+        this.persons = persons;
     }
 }

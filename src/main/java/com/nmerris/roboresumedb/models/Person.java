@@ -2,6 +2,7 @@ package com.nmerris.roboresumedb.models;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.thymeleaf.expression.Strings;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -41,21 +42,34 @@ public class Person implements Comparable<Person> {
 
     private boolean enabled;
 
-    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.EAGER)
+    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     private Set<EducationAchievement> educationAchievements;
 
-    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.EAGER)
+    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     private Set<WorkExperience> workExperiences;
 
-    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.EAGER)
-    private Set<Skill> skills;
+//    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch= FetchType.EAGER)
+//    private Set<Skill> skills;
 
-    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // ????????????????? not sure about this mapping, think it's though
+    @OneToMany(mappedBy = "myPerson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Job> jobs;
 
+
+
+    // Role is owner of Person
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
+
+    // Skill is owner of Person
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
+    private Collection<Skill> skills;
+
+
+
+
 
     public Person() {
         educationAchievements = new HashSet<>();
@@ -92,6 +106,10 @@ public class Person implements Comparable<Person> {
         }
         // should never happen
         return null;
+    }
+
+    public String getFullName() {
+        return nameFirst + " " + nameLast;
     }
 
 
@@ -131,7 +149,7 @@ public class Person implements Comparable<Person> {
         this.workExperiences = workExperiences;
     }
 
-    public Set<Skill> getSkills() {
+    public Collection<Skill> getSkills() {
         return skills;
     }
 

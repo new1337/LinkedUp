@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -34,17 +36,37 @@ public class Job {
     @NotEmpty
     private String description;
 
-    // one job can have many skills, so job 'is parent of' skills
-    @OneToMany(mappedBy = "myJob", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Skill> skills;
+
+
+    // Skill is owner of Job
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "job_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
+    private Collection<Skill> skills;
+
+
+
+
+
+//    // one job can have many skills, so job 'is parent of' skills
+//    @OneToMany(mappedBy = "myJob", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private Set<Skill> skills;
 
     // many jobs can belong to one person
+    // Person is the owner of Job
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     private Person myPerson;
 
 
 
+
+    public Job() {
+        skills = new HashSet<>();
+    }
+
+    public void addSkill(Skill skill) {
+        skills.add(skill);
+    }
 
     public long getId() {
         return id;
@@ -94,11 +116,11 @@ public class Job {
         this.description = description;
     }
 
-    public Set<Skill> getSkills() {
+    public Collection<Skill> getSkills() {
         return skills;
     }
 
-    public void setSkills(Set<Skill> skills) {
+    public void setSkills(Collection<Skill> skills) {
         this.skills = skills;
     }
 

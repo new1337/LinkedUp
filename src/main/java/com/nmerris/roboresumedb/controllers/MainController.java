@@ -28,6 +28,8 @@ public class MainController {
     SkillRepo skillRepo;
     @Autowired
     WorkExperienceRepo workExperienceRepo;
+    @Autowired
+    JobRepo jobRepo;
 
     // TODO: not going to be using this anymore
     @Autowired
@@ -56,11 +58,6 @@ public class MainController {
         System.out.println("=========================================== personRepo.findByUserName.getUsername: " + personRepo.findByUsername(principal.getName()).getUsername());
         System.out.println("=========================================== personRepo.findByUserName.getRole: " + personRepo.findByUsername(principal.getName()).getRole());
 
-//        model.addAttribute("numEds", educationRepo.countAllByMyPersonIs(p));
-//        model.addAttribute("numWorkExps", workExperienceRepo.countAllByMyPersonIs(p));
-//        model.addAttribute("numSkills", skillRepo.countAllByMyPersonIs(p));
-//        addPersonNameToModel(model);
-
 
         // in this app, a Person can only ever have one role, and username is unique
         // show them a summary page based on their role
@@ -71,6 +68,7 @@ public class MainController {
 
             case "ROLE_RECRUITER" :
 
+                model.addAttribute("message", personRepo.findByUsername(principal.getName()).getFullName() + "'s job postings");
                 model.addAttribute("person", personRepo.findByUsername(principal.getName()));
                 return "summaryrecruiter";
         }
@@ -162,6 +160,72 @@ public class MainController {
     }
 
 
+    @GetMapping("/addjob")
+    public String addJobGet(Model model) {
+        model.addAttribute("newJob", new Job());
+
+        return "addjob";
+    }
+
+
+    @PostMapping("/addjob")
+    public String addJobPost(@Valid @ModelAttribute("newJob") Job job,
+                               BindingResult bindingResult, Model model, Principal principal) {
+        System.out.println("=============================================================== just entered /addJob POST");
+//
+//        // get the current Person
+//        Person p = personRepo.findOne(currPerson.getPersonId());
+//
+//        // get the current count from work repo for the current Person
+//        long count = skillRepo.countAllByMyPersonIs(p);
+//        System.out.println("=========================================== repo count for currPerson is: " + count);
+//
+//        addPersonNameToModel(model);
+//
+//
+//        if(bindingResult.hasErrors()) {
+//            NavBarState pageState = getPageLinkState();
+//            pageState.setHighlightSkillNav(true);
+//            model.addAttribute("pageState", pageState);
+//            model.addAttribute("currentNumRecords", count);
+//            model.addAttribute("disableSubmit", count >= 20);
+//
+//            return "addskill";
+//        }
+//
+//        if(count < 20) {
+//            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% about to save skill to Repo");
+//            skillRepo.save(skill);
+//
+//            count = skillRepo.countAllByMyPersonIs(p);
+//            System.out.println("=========================================== repo count for currPerson is: " + count);
+//        }
+//
+//        NavBarState pageState = getPageLinkState();
+//        pageState.setHighlightSkillNav(true);
+//        model.addAttribute("pageState", pageState);
+//
+//        model.addAttribute("currentNumRecords", count);
+//        model.addAttribute("skillJustAdded", skill);
+//        model.addAttribute("disableSubmit", count >= 20);
+
+        if(bindingResult.hasErrors()) {
+
+
+            return "addjob";
+        }
+
+
+        jobRepo.save(job);
+
+        model.addAttribute("message", "Successfully posted a new job");
+        model.addAttribute("person", personRepo.findByUsername(principal.getName()));
+
+        return "summaryrecruiter";
+    }
+
+
+
     // to get here, a user must have clicked on an existing students summary --> edit resume link, so the student must already exist
     @GetMapping("/addperson")
     public String addPersonGet(Model model) {
@@ -220,12 +284,14 @@ public class MainController {
 
 
     @GetMapping("/addeducation")
-    public String addEdGet(Model model) {
+    public String addEdGet(Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addeducation GET");
-        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
+//        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
 
         // get the current Person
-        Person p = personRepo.findOne(currPerson.getPersonId());
+//        Person p = personRepo.findOne(currPerson.getPersonId());
+        Person p = personRepo.findByUsername(principal.getName());
+
 
         // disable the submit button if >= 10 records in db, it would never be possible for the user to click to get
         // here from the navi page if there were already >= 10 records, however they could manually type in the URL
@@ -257,12 +323,13 @@ public class MainController {
     
     @PostMapping("/addeducation")
     public String addEdPost(@Valid @ModelAttribute("newEdAchievement") EducationAchievement educationAchievement,
-                            BindingResult bindingResult, Model model) {
+                            BindingResult bindingResult, Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addeducation POST");
-        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
+//        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
 
         // get the current Person
-        Person p = personRepo.findOne(currPerson.getPersonId());
+//        Person p = personRepo.findOne(currPerson.getPersonId());
+        Person p = personRepo.findByUsername(principal.getName());
 
         // get the current count from educationRepo for the current Person
         long count = educationRepo.countAllByMyPersonIs(p);
@@ -415,7 +482,7 @@ public class MainController {
 
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% created new skill, attached currPerson to it, about to add it to model");
         Skill skill = new Skill();
-        skill.setMyPerson(p);
+//        skill.setMyPerson(p);
         model.addAttribute("newSkill", skill);
 
         return "addskill";

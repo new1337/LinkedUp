@@ -13,5 +13,14 @@ https://gentle-chamber-81023.herokuapp.com/
 username: user, password: pass
 
 TO MANUALLY INSERT ROLES INTO DB:
+
 INSERT INTO role VALUES(1, 'ROLE_USER');
 INSERT INTO role VALUES(2, 'ROLE_RECRUITER');
+
+
+TO MANUALLY INSERT SKILLS INTO DB:
+
+INSERT INTO skill VALUES(1, null, 'Java programming');
+INSERT INTO skill VALUES(1, null, 'Bike Riding');
+INSERT INTO skill VALUES(1, null, 'Singing');
+INSERT INTO skill VALUES(1, null, 'Creative Writing');

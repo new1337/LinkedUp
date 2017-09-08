@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="fragments :: headerFragment"></head>
+<body class="work-page">
+
+<!-- pass a bunch of boolean variables over to the nav fragment, so it knows which links to enable and highlight -->
+<!--<nav th:replace="fragments :: navbar(${pageState})"></nav>-->
+
+<div class="container">
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="panel panel-default card card-3">
+            <div class="panel-body">
+
+                <!--<div class="text-center feedback">-->
+                    <!--<h2 th:text="'Resume for ' + ${firstAndLastName}"></h2>-->
+                    <!--<span class="glyphicon glyphicon-briefcase"></span>-->
+                    <!--<span th:text="${currentNumRecords} + ' of 10 work experiences entered'"></span>-->
+                <!--</div>-->
+
+                <form action="#" th:action="@{/addjob}" th:object="${newJob}" method="post">
+                    <!-- need this or id is zero every time and keep getting additional records when updating -->
+                    <input type="hidden" th:field="*{id}" />
+                    <!-- need this or person_id attached to ed id is null every time -->
+                    <input type="hidden" th:field="*{myPerson.id}"/>
+
+
+                    <div class="form-group">
+                        <label class="section-heading" for="title">Title</label>
+                        <input id="title" class="form-control" type="text" th:field="*{title}" autofocus/>
+                        <p class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="section-heading" for="employer">Employer</label>
+                        <input id="employer" class="form-control" type="text" th:field="*{employer}"/>
+                        <p class="alert alert-danger" th:if="${#fields.hasErrors('employer')}" th:errors="*{employer}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="section-heading" for="minSalary">Min Salary</label>
+                        <input id="minSalary" class="form-control" type="text" th:field="*{minSalary}" th:placeholder="'Jul 4, 1976'"/>
+                        <!-- I can note get @Temporal validation to work with messages.properties, so I just put it here -->
+                        <p class="alert alert-danger" th:if="${#fields.hasErrors('minSalary')}" th:errors="*{minSalary}" th:text="'please enter a day, month, and year'"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="section-heading" for="maxSalary">Max Salary</label>
+                        <input id="maxSalary" class="form-control" type="text" th:field="*{maxSalary}" th:placeholder="'Dec 25, 2000'"/>
+                        <p class="alert alert-danger" th:if="${#fields.hasErrors('maxSalary')}" th:errors="*{maxSalary}" th:text="'please enter a day, month, and year'"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="section-heading" for="description">Description</label>
+                        <input id="description" class="form-control" type="text" th:field="*{description}"/>
+                        <p class="alert alert-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                    </div>
+
+
+                    <div class="clearfix"></div>
+                    <input class="btn btn-primary bold-input" type="submit" value="Submit"/>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div><!-- container -->
+
+<!-- Footer -->
+<footer th:replace="fragments :: footer"></footer>
+
+<!-- javascript -->
+<!-- th:block goes away after processing, but what's inside stays, so it won't affect the page layout -->
+<th:block th:replace="fragments :: javaScriptTemplate"></th:block>
+
+</body>
+
+</html>
