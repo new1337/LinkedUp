@@ -1,6 +1,5 @@
 package com.nmerris.roboresumedb.controllers;
 
-import com.nmerris.roboresumedb.CurrPerson;
 import com.nmerris.roboresumedb.NavBarState;
 import com.nmerris.roboresumedb.Utilities;
 import com.nmerris.roboresumedb.models.*;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Controller
@@ -34,10 +31,6 @@ public class MainController {
     @Autowired
     JobRepo jobRepo;
 
-    // TODO: not going to be using this anymore
-    @Autowired
-    CurrPerson currPerson;
-
     @Autowired
     UserService userService;
 
@@ -48,7 +41,7 @@ public class MainController {
 
         // after successfully logging in, user will see their summary page via the /summary route
         // there is no login post route, it is never called, SecurityConfiguration class sets the default route
-        // after loggin in
+        // after logging in
         return "login";
     }
 
@@ -61,8 +54,6 @@ public class MainController {
         System.out.println("=========================================== personRepo.findByUserName.getUsername: " + personRepo.findByUsername(principal.getName()).getUsername());
         System.out.println("=========================================== personRepo.findByUserName.getRole: " + personRepo.findByUsername(principal.getName()).getRole());
 
-
-        // in this app, a Person can only ever have one role, and username is unique
         // show them a summary page based on their role
         switch(personRepo.findByUsername(principal.getName()).getRole()) {
             case "ROLE_USER" :
@@ -146,22 +137,30 @@ public class MainController {
     }
 
 
-    // wipes all the skills, work experiences, and eds from current Person
+    // wipes all the skills, work experiences, and eds from current Person, only used by job seekers
     @GetMapping("/startover")
     // Transactional is necessary to call removeAllBy.. on the repos
     // PersistenceContext defaults to PersistenceContextType.TRANSACTION, thank you Stack Overflow!
     @Transactional
-    public String startOver() {
+    public String startOver(Principal principal) {
         // remove all items from Person
-        Person p = personRepo.findOne(currPerson.getPersonId());
+        Person p = personRepo.findByUsername(principal.getName());
         p.removeAllEdAchievements();
         p.removeAllWorkExperiences();
         p.removeAllSkills();
 
         // remove all items from repos
         educationRepo.removeAllByMyPersonIs(p);
-//        skillRepo.removeAllByMyPersonIs(p);
         workExperienceRepo.removeAllByMyPersonIs(p);
+
+        // remove this Person from each Skill associated with this Person
+        for (Skill skill : p.getSkills()) {
+            skill.removePerson(p);
+        }
+        // remove all this Persons skills
+        p.getSkills().clear();
+        // save this Person, now should have not eds, workExps, or skills
+        personRepo.save(p);
 
         return "redirect:/editdetails";
     }
@@ -235,62 +234,59 @@ public class MainController {
     }
 
 
-
-    // to get here, a user must have clicked on an existing students summary --> edit resume link, so the student must already exist
-    @GetMapping("/addperson")
-    public String addPersonGet(Model model) {
-        System.out.println("=============================================================== just entered /addperson GET");
-        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
-
-        // send the existing person to the form
-        model.addAttribute("newPerson", personRepo.findOne(currPerson.getPersonId()));
-
-        NavBarState pageState = getPageLinkState();
-        // set the navbar to highlight the appropriate link
-        pageState.setHighlightPersonNav(true);
-        model.addAttribute("pageState", pageState);
-
-        return "addperson";
-    }
-
-
-    @PostMapping("/addperson")
-    public String addPersonPost(@Valid @ModelAttribute("newPerson") Person personFromForm,
-                                BindingResult bindingResult, Model model) {
-        System.out.println("=============================================================== just entered /addperson POST");
-        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
-
-        // return the same view (now with validation error messages) if there were any validation problems
-        if(bindingResult.hasErrors()) {
-            // always need to set up the navbar, every time a view is returned
-            NavBarState pageState = getPageLinkState();
-            pageState.setHighlightPersonNav(true);
-            model.addAttribute("pageState", pageState);
-            return "addperson";
-        }
-
-        // as far as I understand it, the Person coming in to this method from the form is NOT the same as the
-        // Person we sent to the model in /update/id... so even though personFromForm has the updated first and
-        // last names and email, it looses ALL of it's courses.  I could not figure out how to pass the set of courses through the form.
-        // So if you just save personFromForm here, you loose all
-        // courses.  I also tried: storing the Persons courses in currPerson session variable, then adding it back to
-        // personFromForm here.... the problem is that then I get a merge conflict error... the same darn error I was
-        // getting on Friday in class, because it thinks they are two different Persons.  So my solution is to get
-        // Person p back out from the repo, then update it's fields, and save it.  No need to add the courses back, because
-        // they never went anywhere.  Hmmmmmmmmmmmmmmm...................
-        Person p = personRepo.findOne(currPerson.getPersonId());
-        p.setNameFirst(personFromForm.getNameFirst());
-        p.setNameLast(personFromForm.getNameLast());
-        p.setEmail(personFromForm.getEmail());
-        personRepo.save(p);
-
-        // go to education section automatically, it's the most logical
-        // since there is no confirmation page for addperson, we want to redirect here
-        // redirect means that if this route gets to this point, it's not even going to return a view at all, which
-        // is why no model stuff is needed here, redirect is basically like clicking on a link on a web page
-        // you can redirect to any internal route, or any external URL
-        return "redirect:/addeducation";
-    }
+//    @GetMapping("/addperson")
+//    public String addPersonGet(Model model) {
+//        System.out.println("=============================================================== just entered /addperson GET");
+//
+//        // send the existing person to the form
+//        model.addAttribute("newPerson", personRepo.findOne(currPerson.getPersonId()));
+//
+//        NavBarState pageState = getPageLinkState();
+//        // set the navbar to highlight the appropriate link
+//        pageState.setHighlightPersonNav(true);
+//        model.addAttribute("pageState", pageState);
+//
+//        return "addperson";
+//    }
+//
+//
+//    @PostMapping("/addperson")
+//    public String addPersonPost(@Valid @ModelAttribute("newPerson") Person personFromForm,
+//                                BindingResult bindingResult, Model model) {
+//        System.out.println("=============================================================== just entered /addperson POST");
+//        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
+//
+//        // return the same view (now with validation error messages) if there were any validation problems
+//        if(bindingResult.hasErrors()) {
+//            // always need to set up the navbar, every time a view is returned
+//            NavBarState pageState = getPageLinkState();
+//            pageState.setHighlightPersonNav(true);
+//            model.addAttribute("pageState", pageState);
+//            return "addperson";
+//        }
+//
+//        // as far as I understand it, the Person coming in to this method from the form is NOT the same as the
+//        // Person we sent to the model in /update/id... so even though personFromForm has the updated first and
+//        // last names and email, it looses ALL of it's courses.  I could not figure out how to pass the set of courses through the form.
+//        // So if you just save personFromForm here, you loose all
+//        // courses.  I also tried: storing the Persons courses in currPerson session variable, then adding it back to
+//        // personFromForm here.... the problem is that then I get a merge conflict error... the same darn error I was
+//        // getting on Friday in class, because it thinks they are two different Persons.  So my solution is to get
+//        // Person p back out from the repo, then update it's fields, and save it.  No need to add the courses back, because
+//        // they never went anywhere.  Hmmmmmmmmmmmmmmm...................
+//        Person p = personRepo.findOne(currPerson.getPersonId());
+//        p.setNameFirst(personFromForm.getNameFirst());
+//        p.setNameLast(personFromForm.getNameLast());
+//        p.setEmail(personFromForm.getEmail());
+//        personRepo.save(p);
+//
+//        // go to education section automatically, it's the most logical
+//        // since there is no confirmation page for addperson, we want to redirect here
+//        // redirect means that if this route gets to this point, it's not even going to return a view at all, which
+//        // is why no model stuff is needed here, redirect is basically like clicking on a link on a web page
+//        // you can redirect to any internal route, or any external URL
+//        return "redirect:/addeducation";
+//    }
 
 
     @GetMapping("/addeducation")
@@ -312,14 +308,11 @@ public class MainController {
         // each resume section (except personal) shows a running count of the number of records currently in the db
         model.addAttribute("currentNumRecords", educationRepo.countAllByMyPersonIs(p)); // where is my cute little 'o:'?
 
-        NavBarState pageState = getPageLinkState();
+        NavBarState pageState = getPageLinkState(p);
         pageState.setHighlightEdNav(true);
         model.addAttribute("pageState", pageState);
 
-        // the users name is displayed at the top of each resume section (except personal details), we need to check
-        // every time a view is returned, because the user can change their personal details at any time, and we want
-        // to make sure the displayed name is always up to date
-        addPersonNameToModel(model);
+        model.addAttribute("firstAndLastName", p.getFullName());
 
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% created new ea, attached currPerson to it, about to add it to model");
         // create a new ea, attach the curr person to it, and add it to model
@@ -347,12 +340,13 @@ public class MainController {
 
         // the persons name is show at the top of each 'add' section AND each confirmation page, so we want to add
         // it to the model no matter which view is returned
-        addPersonNameToModel(model);
+//        addPersonNameToModel(model);
+        model.addAttribute("firstAndLastName", p.getFullName());
 
         // return the same view (now with validation error messages) if there were any validation problems
         if(bindingResult.hasErrors()) {
             // update the navbar state and add it to our model
-            NavBarState pageState = getPageLinkState();
+            NavBarState pageState = getPageLinkState(p);
             pageState.setHighlightEdNav(true);
             model.addAttribute("pageState", pageState);
 
@@ -387,7 +381,7 @@ public class MainController {
         model.addAttribute("disableSubmit", count >= 10);
 
         // the navbar state depends on the db table counts in various ways, so update after db changes
-        NavBarState pageState = getPageLinkState();
+        NavBarState pageState = getPageLinkState(p);
         pageState.setHighlightEdNav(true);
         model.addAttribute("pageState", pageState);
 
@@ -397,21 +391,20 @@ public class MainController {
 
     // logic in this route is identical to /addeducation, see /addeducation GetMapping for explanatory comments
     @GetMapping("/addworkexperience")
-    public String addWorkGet(Model model) {
+    public String addWorkGet(Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addworkexperience GET");
-        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
+//        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
 
         // get the current Person
-        Person p = personRepo.findOne(currPerson.getPersonId());
-
+//        Person p = personRepo.findOne(currPerson.getPersonId());
+        Person p = personRepo.findByUsername(principal.getName());
         model.addAttribute("disableSubmit", workExperienceRepo.countAllByMyPersonIs(p) >= 10);
         model.addAttribute("currentNumRecords", workExperienceRepo.countAllByMyPersonIs(p));
 
-        NavBarState pageState = getPageLinkState();
+        NavBarState pageState = getPageLinkState(p);
         pageState.setHighlightWorkNav(true);
         model.addAttribute("pageState", pageState);
-
-        addPersonNameToModel(model);
+        model.addAttribute("firstAndLastName", p.getFullName());
 
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% created new workExp, attached currPerson to it, about to add it to model");
         WorkExperience workExp = new WorkExperience();
@@ -425,21 +418,22 @@ public class MainController {
     // logic in this route is identical to /addeducation, see /addeducation PostMapping for explanatory comments
     @PostMapping("/addworkexperience")
     public String addWorkPost(@Valid @ModelAttribute("newWorkExperience") WorkExperience workExperience,
-                            BindingResult bindingResult, Model model) {
+                            BindingResult bindingResult, Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addworkexperience POST");
-        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
+//        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
 
         // get the current Person
-        Person p = personRepo.findOne(currPerson.getPersonId());
+        Person p = personRepo.findByUsername(principal.getName());
 
         // get the current count from work repo for the current Person
         long count = workExperienceRepo.countAllByMyPersonIs(p);
         System.out.println("=========================================== repo count for currPerson is: " + count);
 
-        addPersonNameToModel(model);
+        model.addAttribute("firstAndLastName", p.getFullName());
+
 
         if(bindingResult.hasErrors()) {
-            NavBarState pageState = getPageLinkState();
+            NavBarState pageState = getPageLinkState(p);
             pageState.setHighlightWorkNav(true);
             model.addAttribute("pageState", pageState);
             model.addAttribute("currentNumRecords", count);
@@ -464,7 +458,7 @@ public class MainController {
         model.addAttribute("workExperienceJustAdded", workExperience);
         model.addAttribute("disableSubmit", count >= 10);
 
-        NavBarState pageState = getPageLinkState();
+        NavBarState pageState = getPageLinkState(p);
         pageState.setHighlightWorkNav(true);
         model.addAttribute("pageState", pageState);
 
@@ -474,21 +468,21 @@ public class MainController {
     
     // logic in this route is identical to /addeducation, see /addeducation GetMapping for explanatory comments
     @GetMapping("/addskill")
-    public String addSkillGet(Model model) {
+    public String addSkillGet(Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addskill GET");
-        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
+//        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
 
         // get the current Person
-        Person p = personRepo.findOne(currPerson.getPersonId());
+        Person p = personRepo.findByUsername(principal.getName());
 
-//        model.addAttribute("disableSubmit", skillRepo.countAllByMyPersonIs(p) >= 20);
-//        model.addAttribute("currentNumRecords", skillRepo.countAllByMyPersonIs(p));
+        model.addAttribute("disableSubmit", skillRepo.countAllByIdIs(p.getId()) >= 20);
+        model.addAttribute("currentNumRecords", skillRepo.countAllByIdIs(p.getId()));
 
-        NavBarState pageState = getPageLinkState();
+        NavBarState pageState = getPageLinkState(p);
         pageState.setHighlightSkillNav(true);
         model.addAttribute("pageState", pageState);
 
-        addPersonNameToModel(model);
+        model.addAttribute("firstAndLastName", p.getFullName());
 
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% created new skill, attached currPerson to it, about to add it to model");
         Skill skill = new Skill();
@@ -502,44 +496,43 @@ public class MainController {
     // logic in this route is identical to /addeducation, see /addeducation PostMapping for explanatory comments
     @PostMapping("/addskill")
     public String addSkillPost(@Valid @ModelAttribute("newSkill") Skill skill,
-                              BindingResult bindingResult, Model model) {
+                               BindingResult bindingResult, Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addskill POST");
-        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
+//        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
 
         // get the current Person
-        Person p = personRepo.findOne(currPerson.getPersonId());
+        Person p = personRepo.findByUsername(principal.getName());
 
         // get the current count from work repo for the current Person
-//        long count = skillRepo.countAllByMyPersonIs(p);
-//        System.out.println("=========================================== repo count for currPerson is: " + count);
+        long count = skillRepo.countAllByIdIs(p.getId());
+        System.out.println("=========================================== repo count for currPerson is: " + count);
 
-        addPersonNameToModel(model);
+        model.addAttribute("firstAndLastName", p.getFullName());
 
         if(bindingResult.hasErrors()) {
-            NavBarState pageState = getPageLinkState();
+            NavBarState pageState = getPageLinkState(p);
             pageState.setHighlightSkillNav(true);
             model.addAttribute("pageState", pageState);
-//            model.addAttribute("currentNumRecords", count);
-//            model.addAttribute("disableSubmit", count >= 20);
-
+            model.addAttribute("currentNumRecords", count);
+            model.addAttribute("disableSubmit", count >= 20);
             return "addskill";
         }
 
-//        if(count < 20) {
+        if(count < 20) {
             System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% about to save skill to Repo");
             skillRepo.save(skill);
 
-//            count = skillRepo.countAllByMyPersonIs(p);
-//            System.out.println("=========================================== repo count for currPerson is: " + count);
-//        }
+            count = skillRepo.countAllByIdIs(p.getId());
+            System.out.println("=========================================== repo count for currPerson is: " + count);
+        }
 
-        NavBarState pageState = getPageLinkState();
+        NavBarState pageState = getPageLinkState(p);
         pageState.setHighlightSkillNav(true);
         model.addAttribute("pageState", pageState);
 
-//        model.addAttribute("currentNumRecords", count);
+        model.addAttribute("currentNumRecords", count);
         model.addAttribute("skillJustAdded", skill);
-//        model.addAttribute("disableSubmit", count >= 20);
+        model.addAttribute("disableSubmit", count >= 20);
 
         return "addskillconfirmation";
     }
@@ -549,18 +542,18 @@ public class MainController {
     // every record can be edited by clicking a link next to it
     // every record (except the single personal details record) can also be deleted by clicking a link next to it
     @GetMapping("/editdetails")
-    public String editDetails(Model model) {
+    public String editDetails(Model model, Principal principal) {
         System.out.println("=============================================================== just entered /editdetails GET");
-        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
+//        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
 
         // get the current Person
-        Person p = personRepo.findOne(currPerson.getPersonId());
+        Person p = personRepo.findByUsername(principal.getName());
         model.addAttribute("person", p);
         model.addAttribute("edAchievements", educationRepo.findAllByMyPersonIs(p));
         model.addAttribute("workExperiences", workExperienceRepo.findAllByMyPersonIs(p));
-//        model.addAttribute("skills", skillRepo.findAllByMyPersonIs(p));
+        model.addAttribute("skills", p.getSkills());
 
-        NavBarState pageState = getPageLinkState();
+        NavBarState pageState = getPageLinkState(p);
         pageState.setHighlightEditNav(true);
         model.addAttribute("pageState", pageState);
 
@@ -612,7 +605,7 @@ public class MainController {
                     return "redirect:/editdetails#workexperiences";
                 case "skill" :
                     p.removeSkill(skillRepo.findOne(id));
-                    skillRepo.delete(id);
+                    personRepo.save(p);
                     return "redirect:/editdetails#skills";
                 case "job" :
                     // get the job in question
@@ -650,28 +643,20 @@ public class MainController {
     // id is the id to update
     // type is what table to update
     @GetMapping("/update/{id}")
-    public String update(@PathVariable("id") long id, @RequestParam("type") String type, Model model)
+    public String update(@PathVariable("id") long id, @RequestParam("type") String type, Model model, Principal principal)
     {
         System.out.println("=============================================================== just entered /update/{id} GET");
-        System.out.println("=========================================== currPerson.getPersonId() initially: " + currPerson.getPersonId());
+//        System.out.println("=========================================== currPerson.getPersonId() initially: " + currPerson.getPersonId());
 
         // set the current person ID to the incoming path variable IF type is person or student
-        Person p;
-        if(type.equals("person")) {
-            p = personRepo.findOne(id);
-            currPerson.setPersonId(id);
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!! type was person, so setting currPerson id to: " + id);
-        }
-        else {
-            p = personRepo.findOne(currPerson.getPersonId());
-        }
+        Person p = personRepo.findByUsername(principal.getName());
 
         // no matter what view is returned, we ALWAYS will allow the submit button to work, since the form that is
         // displays can only contain a record that already exists in a repo
         model.addAttribute("disableSubmit", false);
-        addPersonNameToModel(model);
+        model.addAttribute("firstAndLastName", p.getFullName());
 
-        NavBarState pageState = getPageLinkState();
+        NavBarState pageState = getPageLinkState(p);
 
         switch (type) {
             case "person" :
@@ -697,7 +682,7 @@ public class MainController {
                 return "addworkexperience";
             case "skill" :
                 model.addAttribute("newSkill", skillRepo.findOne(id));
-//                model.addAttribute("currentNumRecords", skillRepo.countAllByMyPersonIs(p));
+                model.addAttribute("currentNumRecords", skillRepo.countAllByIdIs(p.getId()));
                 pageState.setHighlightSkillNav(true);
                 model.addAttribute("pageState", pageState);
                 return "addskill";
@@ -718,12 +703,13 @@ public class MainController {
 
 
     @GetMapping("/finalresume")
-    public String finalResumeGet(Model model) {
-        NavBarState pageState = getPageLinkState();
+    public String finalResumeGet(Model model, Principal principal) {
+        Person p = personRepo.findByUsername(principal.getName());
+
+        NavBarState pageState = getPageLinkState(p);
         pageState.setHighlightFinalNav(true);
         model.addAttribute("pageState", pageState);
 
-        Person p = personRepo.findOne(currPerson.getPersonId());
         model.addAttribute("person", p);
 
         return "finalresume";
@@ -741,83 +727,26 @@ public class MainController {
          * current state of the db tables.
          * @return an updated NavBarState, but the highlighted navbar link must still be set individually
          */
-    private NavBarState getPageLinkState() {
+    private NavBarState getPageLinkState(Person p) {
         NavBarState state = new NavBarState();
 
-        // get the current Person, this will return null if currPerson has not been set yet, which is ok
-        // this will happen in /addperson GET when a new person is being entered
-        Person p = personRepo.findOne(currPerson.getPersonId());
+        // add the current table counts, so the navbar badges know what to display
+        state.setNumSkills(skillRepo.countAllByIdIs(p.getId()));
+        state.setNumWorkExps(workExperienceRepo.countAllByMyPersonIs(p));
+        state.setNumEdAchievements(educationRepo.countAllByMyPersonIs(p));
 
-        if(p != null) {
-            // if this line is reached, then there must be a Person already entered
+        // disable links as necessary... don't allow them to click any links if the repos contain too many records
+        state.setDisableAddEdLink(educationRepo.countAllByMyPersonIs(p) >= 10);
+        state.setDisableAddSkillLink(skillRepo.countAllByIdIs(p.getId()) >= 20);
+        state.setDisableAddWorkExpLink(workExperienceRepo.countAllByMyPersonIs(p) >= 10);
 
-            // add the current table counts, so the navbar badges know what to display
-//            state.setNumSkills(skillRepo.countAllByMyPersonIs(p));
-            state.setNumWorkExps(workExperienceRepo.countAllByMyPersonIs(p));
-            state.setNumEdAchievements(educationRepo.countAllByMyPersonIs(p));
+//        state.setDisableEditDetailsLink(false);
 
-            // disable links as necessary... don't allow them to click any links if the repos contain too many records
-            state.setDisableAddEdLink(educationRepo.countAllByMyPersonIs(p) >= 10);
-//            state.setDisableAddSkillLink(skillRepo.countAllByMyPersonIs(p) >= 20);
-            state.setDisableAddWorkExpLink(workExperienceRepo.countAllByMyPersonIs(p) >= 10);
-
-            // enable the edit details link... the user has already entered a Person, so it's ok to to allow them to edit
-            state.setDisableEditDetailsLink(false);
-
-            // disable show final resume link until at least one ed achievement, skill, and personal info has been entered
-//            state.setDisableShowFinalLink(skillRepo.countAllByMyPersonIs(p) == 0 || educationRepo.countAllByMyPersonIs(p) == 0);
-        }
-        else {
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! p == null in getPageLinkState, so must not have found a Person in personRepo");
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!! initializing navbar state with appropriate values....");
-
-            // zero out the counts for the badges, because user has not entered a Person yet
-            state.setNumSkills(0);
-            state.setNumWorkExps(0);
-            state.setNumEdAchievements(0);
-
-            // disable links... user has not entered a Person yet
-            state.setDisableAddEdLink(true);
-            state.setDisableAddSkillLink(true);
-            state.setDisableAddWorkExpLink(true);
-
-            // disable edit link... user has not entered a Person yet
-            state.setDisableEditDetailsLink(true);
-
-            state.setDisableShowFinalLink(true);
-        }
+        // disable show final resume link until at least one ed achievement, skill, and personal info has been entered
+        state.setDisableShowFinalLink(skillRepo.countAllByIdIs(p.getId()) == 0 || educationRepo.countAllByMyPersonIs(p) == 0);
 
         return state;
     }
-
-
-
-    /**
-     * Adds an object (firstAndLastName) to model, that is a String of the first and last name of the Person for this
-     * resume. If the Person table is empty, an appropriate message is added to the model that will indicate to the user
-     * that they need to add start the resume by adding personal details.  This 'backup' String should never be seen..
-     * unless the user manually types in, for example, /addskill in their browser BEFORE they have entered personal details.
-     * NOTE: each template that uses this must refer to it as 'firstAndLastName'
-     *
-     * @return model, now with 'firstAndLastName' attribute already added and ready to use in a template
-     */
-    private void addPersonNameToModel(Model model) {
-        try {
-            // try to get the single Person from the db
-//            Person p = personRepo.findAll().iterator().next();
-            Person p = personRepo.findOne(currPerson.getPersonId());
-            // if there was a Person, add their full name to the model
-            model.addAttribute("firstAndLastName", p.getNameFirst() + " " + p.getNameLast());
-        } catch (Exception e) {
-            // must not have found a Person in the db, so use a placeholder name
-            // this is really convenient for testing, but it also makes the app less likely to crash
-            // the only way this will be shown is if the user manually enters a route before completing the
-            // personal details section, because the other resume section links are disabled until the user
-            // has entered their personal info
-            model.addAttribute("firstAndLastName", "Please start by entering personal details");
-        }
-    }
-
 
 
 }

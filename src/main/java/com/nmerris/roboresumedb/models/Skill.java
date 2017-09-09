@@ -72,6 +72,10 @@ public class Skill implements Comparable<Skill> {
         jobs.remove(job);
     }
 
+    public void removePerson(Person person) {
+        persons.remove(person);
+    }
+
 
 
 
