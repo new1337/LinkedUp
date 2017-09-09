@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Controller
@@ -171,7 +173,8 @@ public class MainController {
 
     @PostMapping("/addjob")
     public String addJobPost(@Valid @ModelAttribute("newJob") Job job,
-                               BindingResult bindingResult, Model model, Principal principal) {
+                             @RequestParam(value = "checkedIds", required = false) long[] checkedIds,
+                             BindingResult bindingResult, Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addJob POST");
 //
 //        // get the current Person
@@ -216,6 +219,10 @@ public class MainController {
             return "addjob";
         }
 
+        for (long id : checkedIds) {
+            job.addSkill(skillRepo.findOne(id));
+        }
+        job.setMyPerson(personRepo.findByUsername(principal.getName()));
 
         jobRepo.save(job);
 
