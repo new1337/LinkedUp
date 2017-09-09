@@ -23,128 +23,46 @@
 
 
 
-<!-- fixed navbar for use in recruiter section of app -->
-<nav th:fragment="recruiterNavbar(highLightPostJob, highLightPostList, highLightSearch)" class="navbar navbar-inverse navbar-fixed-top card-3">
-    <div class="container">
+    <!-- fixed navbar for use in recruiter section of app -->
+    <nav th:fragment="recruiterNavbar(highLightPostJob, highLightPostList, highLightSearch)" class="navbar navbar-inverse navbar-fixed-top card-3">
+        <div class="container">
 
-        <div class="navbar-header">
-            <!-- hamburger menu only shows if width < 992px -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#recruiternavbar">
-                <!-- make a basic hamburger icon from 3 bars -->
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+            <div class="navbar-header">
+                <!-- hamburger menu only shows if width < 992px -->
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#recruiternavbar">
+                    <!-- make a basic hamburger icon from 3 bars -->
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
 
-            <!-- TODO make a new github repo and change this link -->
-            <a class="navbar-brand" href="https://github.com/nmerris/WeekSevenProject">Job Pro 5K</a>
-        </div><!-- navbar header -->
+                <!-- TODO make a new github repo and change this link -->
+                <a class="navbar-brand" href="https://github.com/nmerris/WeekSevenProject">Job Pro 5K</a>
+            </div><!-- navbar header -->
 
-        <div class="navbar-collapse collapse" id="recruiternavbar">
+            <div class="navbar-collapse collapse" id="recruiternavbar">
 
-            <ul class="nav navbar-nav">
-                <li th:classappend="${highLightPostList ? 'active' : ''}">
-                    <a th:href="@{~/summary}"><span class="glyphicon glyphicon-list"></span>Your Postings</a>
-                </li>
-                <li th:classappend="${highLightPostJob? 'active' : ''}">
-                    <a th:href="@{~/addjob}"><span class="glyphicon glyphicon-plus"></span>Post a Job</a>
-                </li>
-            </ul>
+                <ul class="nav navbar-nav">
+                    <li th:classappend="${highLightPostList ? 'active' : ''}">
+                        <a th:href="@{~/summary}"><span class="glyphicon glyphicon-list"></span>Your Postings</a>
+                    </li>
+                    <li th:classappend="${highLightPostJob? 'active' : ''}">
+                        <a th:href="@{~/addjob}"><span class="glyphicon glyphicon-plus"></span>Post a Job</a>
+                    </li>
+                </ul>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li th:classappend="${highLightSearch? 'active' : ''}">
-                    <a th:href="@{~/search}"><span class="glyphicon glyphicon-search"></span>Search</a>
-                </li>
-                <li>
-                    <a th:href="@{~/logout}"><span class="glyphicon glyphicon-user"></span>Logout</a>
-                </li>
-            </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li th:classappend="${highLightSearch? 'active' : ''}">
+                        <a th:href="@{~/search}"><span class="glyphicon glyphicon-search"></span>Search</a>
+                    </li>
+                    <li>
+                        <a th:href="@{~/logout}"><span class="glyphicon glyphicon-user"></span>Logout</a>
+                    </li>
+                </ul>
 
-        </div><!-- navbar-collapse -->
-    </div><!-- container -->
-</nav>
-
-
-
-
-<!-- Fixed navbar for use in job seeker section of app -->
-<!-- navState is passed in from each page that uses navbar, it allows navbar to know which links to highlight, -->
-<!-- which links to disable, and what number to put in each badge -->
-<nav th:fragment="navbar(navState)" class="navbar navbar-default navbar-fixed-top card-3">
-
-    <div class="container">
-
-        <div class="navbar-header">
-            <!-- hamburger menu only shows if width < 992px -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <!-- make a basic hamburger icon from 3 bars -->
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-
-            <a class="navbar-brand" href="https://github.com/nmerris/StudentResumeBotTwo">ROBO RESUME</a>
-        </div><!-- navbar header -->
-
-        <div id="navbar" class="navbar-collapse collapse">
-
-            <ul class="nav navbar-nav">
-                <li th:classappend="${navState.highlightPersonNav ? 'active' : ''}">
-                    <a th:href="@{/addperson}"><span class="glyphicon glyphicon-sunglasses hidden-md hidden-lg"></span>Personal</a>
-                </li>
-
-                <li th:classappend="${navState.highlightEdNav ? 'active' : ''}">
-                    <a th:href="@{/addeducation}" th:classappend="${navState.disableAddEdLink ? 'disable-click' : ''}">
-                        <span class="glyphicon glyphicon-apple hidden-md hidden-lg"></span>Education  <span class="badge" th:text="${navState.numEdAchievements}"></span></a>
-                </li>
-                <li th:classappend="${navState.highlightWorkNav ? 'active' : ''}">
-                    <a th:href="@{/addworkexperience}" th:classappend="${navState.disableAddWorkExpLink ? 'disable-click' : ''}">
-                        <span class="glyphicon glyphicon-briefcase hidden-md hidden-lg"></span>Work  <span class="badge" th:text="${navState.numWorkExps}"></span></a>
-                </li>
-                <li th:classappend="${navState.highlightSkillNav ? 'active' : ''}">
-                    <a th:href="@{/addskill}" th:classappend="${navState.disableAddSkillLink ? 'disable-click' : ''}">
-                        <span class="glyphicon glyphicon-star hidden-md hidden-lg"></span>Skills  <span class="badge" th:text="${navState.numSkills}"></span></a>
-                </li>
-            </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li th:classappend="${navState.highlightEditNav ? 'active' : ''}">
-                    <a th:href="@{/editdetails}"><span class="glyphicon glyphicon-pencil"></span>Edit Details</a>
-                </li>
-
-                <li th:classappend="${navState.highlightFinalNav ? 'active' : ''}">
-                    <a th:href="${navState.disableShowFinalLink} ? '#' : @{/finalresume}"
-                       th:attrappend="data-toggle=${navState.disableShowFinalLink} ? 'modal'"
-                       data-target="#viewFinalModal">
-                        <span class="glyphicon glyphicon-eye-open"></span>View Resume</a>
-                </li>
-
-                <li class="dropdown hidden-sm hidden-xs">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                        <span class="glyphicon glyphicon-menu-hamburger"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a th:href="@{~/studentdirectory}">Student Directory</a></li>
-                        <li><a th:href="@{~/logout}">Logout</a></li>
-                    </ul>
-                </li>
-
-                <li class="hidden-lg hidden-md">
-                    <a th:href="@{~/studentdirectory}"><span class="glyphicon glyphicon-home"></span>Student Directory</a>
-                    <a th:href="@{~/logout}"><span class="glyphicon glyphicon-user"></span>Logout</a>
-                </li>
-
-            </ul>
-
-        </div><!-- navbar-collapse -->
-    </div><!-- container -->
-</nav>
-
-
-
-
-
-
+            </div><!-- navbar-collapse -->
+        </div><!-- container -->
+    </nav>
 
 
 
@@ -153,7 +71,7 @@
     <!-- navState is passed in from each page that uses navbar, it allows navbar to know which links to highlight, -->
     <!-- which links to disable, and what number to put in each badge -->
     <nav th:fragment="navbar(navState)" class="navbar navbar-default navbar-fixed-top card-3">
-        
+
         <div class="container">
 
             <div class="navbar-header">
@@ -172,7 +90,9 @@
 
                 <ul class="nav navbar-nav">
                     <li th:classappend="${navState.highlightPersonNav ? 'active' : ''}">
-                        <a th:href="@{/addperson}"><span class="glyphicon glyphicon-sunglasses hidden-md hidden-lg"></span>Personal</a>
+                        <!-- doesn't matter what id is for Person, because we use Principal in controller
+                                         to determine which Person is currently logged in -->
+                        <a th:href="@{|/update/0/?type=person|}"><span class="glyphicon glyphicon-sunglasses hidden-md hidden-lg"></span>Personal</a>
                     </li>
 
                     <li th:classappend="${navState.highlightEdNav ? 'active' : ''}">
@@ -206,13 +126,13 @@
                             <span class="glyphicon glyphicon-menu-hamburger"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a th:href="@{~/studentdirectory}">Student Directory</a></li>
+                            <!--<li><a th:href="@{~/studentdirectory}">Student Directory</a></li>-->
                             <li><a th:href="@{~/logout}">Logout</a></li>
                         </ul>
                     </li>
 
                     <li class="hidden-lg hidden-md">
-                        <a th:href="@{~/studentdirectory}"><span class="glyphicon glyphicon-home"></span>Student Directory</a>
+                        <!--<a th:href="@{~/studentdirectory}"><span class="glyphicon glyphicon-home"></span>Student Directory</a>-->
                         <a th:href="@{~/logout}"><span class="glyphicon glyphicon-user"></span>Logout</a>
                     </li>
 
@@ -221,7 +141,6 @@
             </div><!-- navbar-collapse -->
         </div><!-- container -->
     </nav>
-
 
     <footer th:fragment="footerTemplate">
         <div class="container">

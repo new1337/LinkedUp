@@ -31,7 +31,9 @@
                                 <td><p th:text="${person.nameLast}"></p></td>
                                 <td><p th:text="${person.email}"></p></td>
                                 <td>
-                                    <a th:href="@{|/update/${person.id}?type=person|}" class="action-link">Edit</a>
+                                    <!-- doesn't matter what id is for Person, because we use Principal in controller
+                                         to determine which Person is currently logged in -->
+                                    <a th:href="@{|/update/0?type=person|}" class="action-link">Edit</a>
                                 </td>
                             </tbody>
                         </table>
