@@ -72,6 +72,10 @@ public class MainController {
 
                 model.addAttribute("message", personRepo.findByUsername(principal.getName()).getFullName() + "'s job postings");
                 model.addAttribute("person", personRepo.findByUsername(principal.getName()));
+                model.addAttribute("highLightPostJob", false);
+                model.addAttribute("highLightPostList", true);
+                model.addAttribute("highLightSearch", false);
+
                 return "summaryrecruiter";
         }
 
@@ -162,12 +166,33 @@ public class MainController {
     }
 
 
+    @GetMapping("/joblist")
+    public String jobListGet(Model model, Principal principal) {
+        System.out.println("=============================================================== just entered /joblist GET");
+        System.out.println("=========================================== principal.getName: " + principal.getName());
+
+
+//        model.addAttribute("jobs", jobRepo.findAllByMyPersonIs(personRepo.findByUsername(principal.getName())));
+        model.addAttribute("message", "Your job postings");
+        model.addAttribute("person", personRepo.findByUsername(principal.getName()));
+
+        model.addAttribute("highLightPostJob", false);
+        model.addAttribute("highLightPostList", true);
+        model.addAttribute("highLightSearch", false);
+
+        return "summaryrecruiter";
+    }
+
+
     @GetMapping("/addjob")
     public String addJobGet(Model model) {
         System.out.println("=============================================================== just entered /addJob GET");
 
         model.addAttribute("newJob", new Job());
         model.addAttribute("skills", skillRepo.findAll());
+        model.addAttribute("highLightPostJob", true);
+        model.addAttribute("highLightPostList", false);
+        model.addAttribute("highLightSearch", false);
 
         return "addjob";
     }
@@ -178,42 +203,7 @@ public class MainController {
                              @RequestParam(value = "checkedIds", required = false) long[] checkedIds,
                              BindingResult bindingResult, Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addJob POST");
-//
-//        // get the current Person
-//        Person p = personRepo.findOne(currPerson.getPersonId());
-//
-//        // get the current count from work repo for the current Person
-//        long count = skillRepo.countAllByMyPersonIs(p);
-//        System.out.println("=========================================== repo count for currPerson is: " + count);
-//
-//        addPersonNameToModel(model);
-//
-//
-//        if(bindingResult.hasErrors()) {
-//            NavBarState pageState = getPageLinkState();
-//            pageState.setHighlightSkillNav(true);
-//            model.addAttribute("pageState", pageState);
-//            model.addAttribute("currentNumRecords", count);
-//            model.addAttribute("disableSubmit", count >= 20);
-//
-//            return "addskill";
-//        }
-//
-//        if(count < 20) {
-//            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% about to save skill to Repo");
-//            skillRepo.save(skill);
-//
-//            count = skillRepo.countAllByMyPersonIs(p);
-//            System.out.println("=========================================== repo count for currPerson is: " + count);
-//        }
-//
-//        NavBarState pageState = getPageLinkState();
-//        pageState.setHighlightSkillNav(true);
-//        model.addAttribute("pageState", pageState);
-//
-//        model.addAttribute("currentNumRecords", count);
-//        model.addAttribute("skillJustAdded", skill);
-//        model.addAttribute("disableSubmit", count >= 20);
+
 
         if(bindingResult.hasErrors()) {
 
@@ -230,6 +220,10 @@ public class MainController {
 
         model.addAttribute("message", "Successfully posted a new job");
         model.addAttribute("person", personRepo.findByUsername(principal.getName()));
+        model.addAttribute("highLightPostJob", false);
+        model.addAttribute("highLightPostList", true);
+        model.addAttribute("highLightSearch", false);
+
 
         return "summaryrecruiter";
     }

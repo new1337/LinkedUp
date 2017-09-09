@@ -5,7 +5,7 @@
 
 <body>
 
-<!--<nav th:replace="fragments :: adminNavbar(${highlightDirectory}, ${highlightCourses}, ${highlightAddCourse}, ${highlightAddStudent})"></nav>-->
+<nav th:replace="fragments :: recruiterNavbar(${highLightPostJob}, ${highLightPostList}, ${highLightSearch})"></nav>
 
 <div class="container">
     <div class="col-lg-8 col-lg-offset-2">
@@ -24,7 +24,7 @@
                                 <!--<th>Salary</th>-->
                                 <th>Description</th>
                                 <th>Skills</th>
-                                <th>Rating</th>
+                                <!--<th>Rating</th>-->
                             </tr>
                         </thead>
 
@@ -43,7 +43,7 @@
                                                 <th:block th:each="askill:${item.skills}">
                                                     <tr>
                                                         <td><a th:text="${askill.skill}" th:href="@{|/update/${item.id}?type=job|}"></a></td>
-                                                        <td><a th:text="${askill.rating}" th:href="@{|/update/${item.id}?type=job|}"></a></td>
+                                                        <!--<td><a th:text="${askill.rating}" th:href="@{|/update/${item.id}?type=job|}"></a></td>-->
                                                     </tr>
                                                 </th:block>
                                             </tbody>
