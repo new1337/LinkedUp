@@ -58,7 +58,8 @@ public class Person implements Comparable<Person> {
 
 
     // Role is owner of Person
-    @ManyToMany(fetch = FetchType.LAZY)
+    // for the love of everything holy, MUST MUST MUST use EAGER here, or you can't log in at all!!
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
