@@ -8,7 +8,7 @@
 <!--<nav th:replace="fragments :: navbar(${pageState})"></nav>-->
 
 <div class="container">
-    <div class="col-lg-6 col-lg-offset-3">
+    <div class="col-lg-8 col-lg-offset-2">
         <div class="panel panel-default card card-3">
             <div class="panel-body">
 
@@ -63,6 +63,8 @@
                             </caption>
 
                             <tbody>
+                            <!-- TODO it would be cool to have a set of radio buttons inline with each skill so recruiter could choose rating -->
+                            <!-- tricky getting these ratings back to the controller post route..... -->
                                 <th:block th:each="item:${skills}">
                                     <tr>
                                         <!-- checked skill ids will be available as request params in controller post route -->

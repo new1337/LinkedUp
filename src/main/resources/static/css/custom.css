@@ -146,6 +146,12 @@ table {
     box-sizing: border-box;
 }
 
+td a {
+    display: block;
+    /*border: 1px solid black;*/
+    /*padding: 16px;*/
+}
+
 thead {
     color: white;
     background-color: #428bca;

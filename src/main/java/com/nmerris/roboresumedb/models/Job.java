@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Job {
+public class Job implements Comparable<Job> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,20 +36,10 @@ public class Job {
     @NotEmpty
     private String description;
 
-
-
     // Skill is owner of Job
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "job_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private Collection<Skill> skills;
-
-
-
-
-
-//    // one job can have many skills, so job 'is parent of' skills
-//    @OneToMany(mappedBy = "myJob", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private Set<Skill> skills;
 
     // Person is the owner of Job
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,6 +47,12 @@ public class Job {
     private Person myPerson;
 
 
+    // just compare by ids, could compare with anything we want
+    @Override
+    public int compareTo(Job other) {
+        // returns negative number is this.getId < other.getId, 0 if equal
+        return Long.compare(this.getId(), other.getId());
+    }
 
 
     public Job() {
