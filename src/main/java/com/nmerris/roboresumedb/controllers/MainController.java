@@ -198,6 +198,20 @@ public class MainController {
         model.addAttribute("highLightPostList", false);
         model.addAttribute("highLightSearch", false);
 
+        // make a Set of skill names, no duplicates in a set, user can pick from these, and also pick a rating
+        Set<String> skillNames = new LinkedHashSet<>();
+//        Set<String> skillNames = new HashSet<>();
+        skillNames.add("None Selected");
+
+        for (Skill skill : skillRepo.findAllByOrderBySkillAsc()) {
+            skillNames.add(skill.getSkill());
+        }
+
+
+
+
+        model.addAttribute("skillNames", skillNames);
+
         return "addjob";
     }
 

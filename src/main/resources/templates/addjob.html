@@ -55,26 +55,82 @@
                         <p class="alert alert-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
                     </div>
 
-                    <div class="table-responsive">
-                        <table class="table table-hover table-condensed">
-                            <caption>
-                                <h3><b>Desired Skills</b></h3>
-                            </caption>
-
-                            <tbody>
-                            <!-- TODO it would be cool to have a set of radio buttons inline with each skill so recruiter could choose rating -->
-                            <!-- tricky getting these ratings back to the controller post route..... -->
-                                <th:block th:each="item : ${#lists.sort(skills)}">
-                                    <tr>
-                                        <!-- checked skill ids will be available as request params in controller post route -->
-                                        <td><input type="checkbox" name="checkedIds" th:value="${item.id}"/></td>
-                                        <td th:text="${item.skill}"></td>
-                                    </tr>
-                                </th:block>
-                            </tbody>
-
-                        </table>
+                    <div class="form-group">
+                        <label class="section-heading" for="skill">Select Up to Three Skills</label>
+                        <select id="skill" class="form-control" name="selectedSkillNameOne">
+                            <option th:each="item : ${skillNames}"
+                                    th:value="${item}"
+                                    th:text="${item}"></option>
+                        </select>
                     </div>
+                    <label class="section-heading" for="expertId">Expert</label>
+                    <input type="radio" name="ratingOne" id="expertId"/>
+                    <label class="section-heading" for="proficientId">Proficient</label>
+                    <input type="radio" name="ratingOne" id="proficientId" value="Proficient"/>
+                    <label class="section-heading" for="familiarId">Familiar</label>
+                    <input type="radio" name="ratingOne" id="familiarId" value="Familiar"/>
+
+                    <br/>
+                    <br/>
+
+                    <div class="form-group">
+                        <!--<label class="section-heading" for="skillTwo">Select a Skill</label>-->
+                        <select id="skillTwo" class="form-control" name="selectedSkillNameTwo">
+                            <option th:each="item : ${skillNames}"
+                                    th:value="${item}"
+                                    th:text="${item}"></option>
+                        </select>
+                    </div>
+                    <label class="section-heading" for="expertIdTwo">Expert</label>
+                    <input type="radio" name="ratingTwo" id="expertIdTwo"/>
+                    <label class="section-heading" for="proficientIdTwo">Proficient</label>
+                    <input type="radio" name="ratingTwo" id="proficientIdTwo" value="Proficient"/>
+                    <label class="section-heading" for="familiarIdTwo">Familiar</label>
+                    <input type="radio" name="ratingTwo" id="familiarIdTwo" value="Familiar"/>
+
+                    <br/>
+                    <br/>
+
+                    <div class="form-group">
+                        <!--<label class="section-heading" for="skillThree">Select a Skill</label>-->
+                        <select id="skillThree" class="form-control" name="selectedSkillNameThree">
+                            <option th:each="item : ${skillNames}"
+                                    th:value="${item}"
+                                    th:text="${item}"></option>
+                        </select>
+                    </div>
+                    <label class="section-heading" for="expertIdThree">Expert</label>
+                    <input type="radio" name="ratingThree" id="expertIdThree"/>
+                    <label class="section-heading" for="proficientIdThree">Proficient</label>
+                    <input type="radio" name="ratingThree" id="proficientIdThree" value="Proficient"/>
+                    <label class="section-heading" for="familiarIdThree">Familiar</label>
+                    <input type="radio" name="ratingThree" id="familiarIdThree" value="Familiar"/>
+                    
+                    
+                    
+                    
+                    
+                    
+                    <!--<div class="table-responsive">-->
+                        <!--<table class="table table-hover table-condensed">-->
+                            <!--<caption>-->
+                                <!--<h3><b>Desired Skills</b></h3>-->
+                            <!--</caption>-->
+
+                            <!--<tbody>-->
+                            <!--&lt;!&ndash; TODO it would be cool to have a set of radio buttons inline with each skill so recruiter could choose rating &ndash;&gt;-->
+                            <!--&lt;!&ndash; tricky getting these ratings back to the controller post route..... &ndash;&gt;-->
+                                <!--<th:block th:each="item : ${#lists.sort(skills)}">-->
+                                    <!--<tr>-->
+                                        <!--&lt;!&ndash; checked skill ids will be available as request params in controller post route &ndash;&gt;-->
+                                        <!--<td><input type="checkbox" name="checkedIds" th:value="${item.id}"/></td>-->
+                                        <!--<td th:text="${item.skill}"></td>-->
+                                    <!--</tr>-->
+                                <!--</th:block>-->
+                            <!--</tbody>-->
+
+                        <!--</table>-->
+                    <!--</div>-->
 
 
                     <div class="clearfix"></div>
