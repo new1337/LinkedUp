@@ -19,13 +19,21 @@ INSERT INTO role VALUES(2, 'ROLE_RECRUITER');
 INSERT INTO role VALUES(3, 'ROLE_ADMIN');
 
 -- (id, rating, skill) 
-INSERT INTO skill VALUES(1, null, 'Java programming');
-INSERT INTO skill VALUES(2, null, 'Bike Riding');
-INSERT INTO skill VALUES(3, null, 'Singing');
-INSERT INTO skill VALUES(4, null, 'Creative Writing');
+INSERT INTO skill VALUES(1, 'Expert', 'Java programming');
+INSERT INTO skill VALUES(2, 'Proficient', 'Java programming');
+INSERT INTO skill VALUES(3, 'Familiar', 'Java programming');
+INSERT INTO skill VALUES(4, 'Expert', 'Bike Riding');
+INSERT INTO skill VALUES(5, 'Proficient', 'Bike Riding');
+INSERT INTO skill VALUES(6, 'Familiar', 'Bike Riding');
+INSERT INTO skill VALUES(7, 'Expert', 'Singing');
+INSERT INTO skill VALUES(8, 'Proficient', 'Singing');
+INSERT INTO skill VALUES(9, 'Familiar', 'Singing');
+INSERT INTO skill VALUES(10, 'Expert', 'Creative Writing');
+INSERT INTO skill VALUES(11, 'Proficient', 'Creative Writing');
+INSERT INTO skill VALUES(12, 'Familiar', 'Creative Writing');
 
-INSERT INTO person VALUES(1, 'a@b.com', 1, 'RecruiterJim', 'LastName', 'pass', 'rec');
-INSERT INTO person VALUES(2, 'y@z.com', 1, 'UserSue', 'LastName', 'pass', 'user');
+INSERT INTO person VALUES(1, 'a@b.com', 1, 'Jim', 'Bean', 'pass', 'rec');
+INSERT INTO person VALUES(2, 'y@z.com', 1, 'Sue', 'Bee', 'pass', 'user');
 
 INSERT INTO person_roles VALUES(1, 2);
 INSERT INTO person_roles VALUES(2, 1);

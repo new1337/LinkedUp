@@ -19,7 +19,7 @@ public class Skill implements Comparable<Skill> {
 
     @NotEmpty
     @Size(max = 50)
-    @Column(unique = true)
+//    @Column(unique = true)
     private String skill;
 
 //    @NotEmpty

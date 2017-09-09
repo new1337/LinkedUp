@@ -112,7 +112,9 @@ public class Person implements Comparable<Person> {
         return nameFirst + " " + nameLast;
     }
 
-
+    public void addSkill(Skill skill) {
+        skills.add(skill);
+    }
 
     // normal getters/setters =================================================================================
     // in order to delete an ed, you must first remove it from it's parents collection

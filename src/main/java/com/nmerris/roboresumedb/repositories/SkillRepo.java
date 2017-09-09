@@ -8,4 +8,6 @@ public interface SkillRepo extends CrudRepository<Skill, Long> {
 
     long countAllByIdIs(long id);
 
+    Skill findBySkillIsAndRatingIs(String name, String rating);
+
 }

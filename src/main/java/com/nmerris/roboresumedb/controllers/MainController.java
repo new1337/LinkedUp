@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 @Controller
@@ -492,21 +490,30 @@ public class MainController {
 
         model.addAttribute("firstAndLastName", p.getFullName());
 
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% created new skill, attached currPerson to it, about to add it to model");
-        Skill skill = new Skill();
-//        skill.setMyPerson(p);
-        model.addAttribute("newSkill", skill);
+
+        // make a Set of skill names, no duplicates in a set, user can pick from these, and also pick a rating
+        Set<String> skillNames = new HashSet<>();
+        for (Skill skill : skillRepo.findAll()) {
+            skillNames.add(skill.getSkill());
+        }
+
+        model.addAttribute("skillNames", skillNames);
 
         return "addskill";
     }
 
 
-    // logic in this route is identical to /addeducation, see /addeducation PostMapping for explanatory comments
+    // no BindingResult necessary because user options are drop down and prechecked radio, so can't be null/empty
     @PostMapping("/addskill")
-    public String addSkillPost(@Valid @ModelAttribute("newSkill") Skill skill,
-                               BindingResult bindingResult, Model model, Principal principal) {
+    public String addSkillPost(@RequestParam(value = "selectedSkillName", required = false) String selectedSkillName,
+                               @RequestParam(value = "rating", required = false) String rating,
+                                Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addskill POST");
 //        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
+
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! got newSkill with name: " + selectedSkillName);
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! got newSkill with rating: " + rating);
+
 
         // get the current Person
         Person p = personRepo.findByUsername(principal.getName());
@@ -517,18 +524,16 @@ public class MainController {
 
         model.addAttribute("firstAndLastName", p.getFullName());
 
-        if(bindingResult.hasErrors()) {
-            NavBarState pageState = getPageLinkState(p);
-            pageState.setHighlightSkillNav(true);
-            model.addAttribute("pageState", pageState);
-            model.addAttribute("currentNumRecords", count);
-            model.addAttribute("disableSubmit", count >= 20);
-            return "addskill";
-        }
+        Skill skillToAddToPerson = skillRepo.findBySkillIsAndRatingIs(selectedSkillName, rating);
+
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! skillRepo.findByBlahBlah id: " + skillToAddToPerson.getId());
+
 
         if(count < 20) {
             System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% about to save skill to Repo");
-            skillRepo.save(skill);
+
+            p.addSkill(skillToAddToPerson);
+            personRepo.save(p);
 
             count = p.getSkills().size();
             System.out.println("=========================================== repo count for currPerson is: " + count);
@@ -539,7 +544,7 @@ public class MainController {
         model.addAttribute("pageState", pageState);
 
         model.addAttribute("currentNumRecords", count);
-        model.addAttribute("skillJustAdded", skill);
+        model.addAttribute("skillJustAdded", skillToAddToPerson);
         model.addAttribute("disableSubmit", count >= 20);
 
         return "addskillconfirmation";
