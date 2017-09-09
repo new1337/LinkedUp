@@ -163,6 +163,7 @@ public class MainController {
     @GetMapping("/addjob")
     public String addJobGet(Model model) {
         model.addAttribute("newJob", new Job());
+        model.addAttribute("skills", skillRepo.findAll());
 
         return "addjob";
     }
