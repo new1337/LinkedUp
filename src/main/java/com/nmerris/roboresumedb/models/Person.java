@@ -141,6 +141,10 @@ public class Person implements Comparable<Person> {
         skills.clear();
     }
 
+    public void removeJob(Job job) {
+        jobs.remove(job);
+    }
+
 
 
 

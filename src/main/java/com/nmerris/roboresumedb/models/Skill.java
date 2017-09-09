@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Skill implements Comparable<Skill> {
@@ -64,6 +65,11 @@ public class Skill implements Comparable<Skill> {
     @Override
     public int compareTo(Skill other) {
         return getSkill().compareToIgnoreCase(other.getSkill());
+    }
+
+
+    public void removeJob(Job job) {
+        jobs.remove(job);
     }
 
 

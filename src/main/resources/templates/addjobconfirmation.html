@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="fragments :: headerFragment"></head>
+
+<body>
+
+<nav th:replace="fragments :: recruiterNavbar(${highLightPostJob}, ${highLightPostList}, ${highLightSearch})"></nav>
+
+<div class="container">
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="panel panel-default card card-3">
+            <div class="panel-body">
+                <!--<div class="text-center feedback">-->
+                    <!--<h2 th:text="'Resume for ' + ${firstAndLastName}"></h2>-->
+                    <!--<span class="glyphicon glyphicon-education"></span>-->
+                    <!--<span th:text="${currentNumRecords} + ' of 10 educational achievements entered'"></span>-->
+                <!--</div>-->
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><h4><b>Job Post Confirmation</b></h4></div>
+                    <ul class="list-group">
+                        <li class="list-group-item" th:text="${'Employer: ' + jobJustAdded.employer}"></li>
+                        <li class="list-group-item" th:text="${'Title: ' + jobJustAdded.title}"></li>
+                        <li class="list-group-item" th:text="${'Description: ' + jobJustAdded.description}"></li>
+                        <li class="list-group-item" th:text="${'Salary Range: $' + jobJustAdded.minSalary + ' - $' + jobJustAdded.maxSalary}"></li>
+
+                        <!-- TODO can't #lists.sort here, get a LAZY fetch exception... would be nice to list in alphabetical order -->
+                        <th:block th:each = "item : ${jobJustAdded.skills}">
+                            <li class="list-group-item" th:text="${'Skill: ' + item.skill"></li>
+                        </th:block>
+                    </ul>
+                </div>
+                <a class="btn btn-primary bold-input" th:href="@{~/addjob}"><b>+ Add Another</b></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="fragments :: footer"></footer>
+
+<!-- javascript -->
+<!-- th:block goes away after processing, but what's inside stays, so it won't affect the page layout -->
+<th:block th:replace="fragments :: javaScriptTemplate"></th:block>
+
+</body>
+
+</html>

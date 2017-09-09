@@ -58,6 +58,7 @@ public class Job implements Comparable<Job> {
 
 
 
+
     public Job() {
         skills = new HashSet<>();
     }

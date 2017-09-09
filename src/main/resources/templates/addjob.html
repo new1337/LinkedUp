@@ -38,14 +38,14 @@
 
                     <div class="form-group">
                         <label class="section-heading" for="minSalary">Min Salary</label>
-                        <input id="minSalary" class="form-control" type="text" th:field="*{minSalary}"/>
+                        <input id="minSalary" class="form-control" type="text" th:field="*{minSalary}" placeholder="$"/>
                         <!-- I can note get @Temporal validation to work with messages.properties, so I just put it here -->
                         <p class="alert alert-danger" th:if="${#fields.hasErrors('minSalary')}" th:errors="*{minSalary}"></p>
                     </div>
 
                     <div class="form-group">
                         <label class="section-heading" for="maxSalary">Max Salary</label>
-                        <input id="maxSalary" class="form-control" type="text" th:field="*{maxSalary}"/>
+                        <input id="maxSalary" class="form-control" type="text" th:field="*{maxSalary}" placeholder="$"/>
                         <p class="alert alert-danger" th:if="${#fields.hasErrors('maxSalary')}" th:errors="*{maxSalary}"></p>
                     </div>
 
@@ -79,6 +79,9 @@
 
                     <div class="clearfix"></div>
                     <input class="btn btn-primary bold-input" type="submit" value="Submit"/>
+                    <!-- TODO make the delete button align to the right -->
+                    <a class="btn btn-warning bold-input" th:href="@{|/delete/*{id}?type=job|}"><b>Delete</b></a>
+
                 </form>
 
             </div>

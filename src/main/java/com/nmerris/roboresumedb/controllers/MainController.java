@@ -7,6 +7,7 @@ import com.nmerris.roboresumedb.models.*;
 import com.nmerris.roboresumedb.repositories.*;
 import com.nmerris.roboresumedb.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -222,14 +223,15 @@ public class MainController {
 
         jobRepo.save(job);
 
-        model.addAttribute("message", "Successfully posted a new job");
-        model.addAttribute("person", personRepo.findByUsername(principal.getName()));
-        model.addAttribute("highLightPostJob", false);
-        model.addAttribute("highLightPostList", true);
+//        model.addAttribute("message", "Successfully posted a new job");
+
+        model.addAttribute("jobJustAdded", job);
+        model.addAttribute("highLightPostJob", true);
+        model.addAttribute("highLightPostList", false);
         model.addAttribute("highLightSearch", false);
 
 
-        return "summaryrecruiter";
+        return "addjobconfirmation";
     }
 
 
@@ -571,13 +573,13 @@ public class MainController {
     // this route is triggered when the user clicks on the 'delete' link next to a row in editdetails.html
     // no model is needed here because all the returned views are redirects
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") long id, @RequestParam("type") String type)
+    public String delete(@PathVariable("id") long id, @RequestParam("type") String type, Principal principal)
     {
         System.out.println("=============================================================== just entered /delete/{id} GET");
-        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
+//        System.out.println("=========================================== currPerson.getPersonId(): " + currPerson.getPersonId());
         System.out.println("=========================================== incoming path var Id: " + id);
 
-        Person p = personRepo.findOne(currPerson.getPersonId());
+        Person p = personRepo.findByUsername(principal.getName());
 
         try {
             switch (type) {
@@ -612,6 +614,25 @@ public class MainController {
                     p.removeSkill(skillRepo.findOne(id));
                     skillRepo.delete(id);
                     return "redirect:/editdetails#skills";
+                case "job" :
+                    // get the job in question
+                    Job job = jobRepo.findOne(id);
+
+                    // remove the skills from the job... necessary? don't think so....
+//                    job.getSkills().clear();
+
+                    // remove the job from it's person
+                    p.removeJob(job);
+
+                    // remove this job from all Skills that associate with it
+                    for (Skill skill : skillRepo.findAll()) {
+                        skill.removeJob(job);
+                    }
+
+                    // delete it
+                    jobRepo.delete(id);
+
+                    return "redirect:/summary";
             }
         } catch (Exception e) {
             // need to catch an exception that may be thrown if user refreshes the page after deleting an item.
@@ -686,6 +707,7 @@ public class MainController {
                 model.addAttribute("highLightPostJob", true);
                 model.addAttribute("highLightPostList", false);
                 model.addAttribute("highLightSearch", false);
+                model.addAttribute("showDelete", true);
                 return "addjob";
         }
 
