@@ -15,7 +15,7 @@ public class Role {
     private String role;
 
     // a role always 'owns' its Person or Recruiter, it's just more logical this way if you ask me
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Collection<Person> persons;
 
 //    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)

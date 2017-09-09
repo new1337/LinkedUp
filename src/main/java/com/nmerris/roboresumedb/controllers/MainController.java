@@ -211,9 +211,13 @@ public class MainController {
             return "addjob";
         }
 
-        for (long id : checkedIds) {
-            job.addSkill(skillRepo.findOne(id));
+        if(checkedIds != null) {
+            for (long id : checkedIds) {
+                job.addSkill(skillRepo.findOne(id));
+            }
         }
+
+
         job.setMyPerson(personRepo.findByUsername(principal.getName()));
 
         jobRepo.save(job);
@@ -676,6 +680,13 @@ public class MainController {
                 pageState.setHighlightSkillNav(true);
                 model.addAttribute("pageState", pageState);
                 return "addskill";
+            case "job" :
+                model.addAttribute("newJob", jobRepo.findOne(id));
+                model.addAttribute("skills", skillRepo.findAll());
+                model.addAttribute("highLightPostJob", true);
+                model.addAttribute("highLightPostList", false);
+                model.addAttribute("highLightSearch", false);
+                return "addjob";
         }
 
         // should never happen, but need it to compile, better to redirect, just in case something does go wrong, at

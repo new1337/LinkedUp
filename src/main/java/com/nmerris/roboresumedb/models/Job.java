@@ -51,8 +51,11 @@ public class Job implements Comparable<Job> {
     @Override
     public int compareTo(Job other) {
         // returns negative number is this.getId < other.getId, 0 if equal
-        return Long.compare(this.getId(), other.getId());
+//        return Long.compare(this.getId(), other.getId());
+        return getEmployer().compareToIgnoreCase(other.getEmployer());
+
     }
+
 
 
     public Job() {

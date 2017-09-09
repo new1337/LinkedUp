@@ -64,7 +64,7 @@
                             <tbody>
                             <!-- TODO it would be cool to have a set of radio buttons inline with each skill so recruiter could choose rating -->
                             <!-- tricky getting these ratings back to the controller post route..... -->
-                                <th:block th:each="item:${skills}">
+                                <th:block th:each="item : ${#lists.sort(skills)}">
                                     <tr>
                                         <!-- checked skill ids will be available as request params in controller post route -->
                                         <td><input type="checkbox" name="checkedIds" th:value="${item.id}"/></td>

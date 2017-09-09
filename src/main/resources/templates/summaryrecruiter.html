@@ -19,8 +19,8 @@
 
                         <thead>
                             <tr>
-                                <th>Title</th>
                                 <th>Employer</th>
+                                <th>Title</th>
                                 <!--<th>Salary</th>-->
                                 <th>Description</th>
                                 <th>Skills</th>
@@ -30,17 +30,17 @@
 
                         <tbody>
                             <!-- sort jobs in ascending order by id (see Jobs class, which implements Comparable) -->
-                            <th:block th:each="item: ${#lists.sort(person.jobs)}">
+                            <th:block th:each="item : ${#lists.sort(person.jobs)}">
                                 <tr>
-                                    <td><a th:text="${item.title}" th:href="@{|/update/${item.id}?type=job|}"></a></td>
                                     <td><a th:text="${item.employer}" th:href="@{|/update/${item.id}?type=job|}"></a></td>
+                                    <td><a th:text="${item.title}" th:href="@{|/update/${item.id}?type=job|}"></a></td>
                                     <!--<td th:text="${item.minSalary} + ' - ' + ${item.maxSalary}"></td>-->
                                     <td><a th:text="${item.description}" th:href="@{|/update/${item.id}?type=job|}"></a></td>
                                     <td>
                                         <!-- nested table, so each skill looks nice at the end of each job row -->
                                         <table>
                                             <tbody>
-                                                <th:block th:each="askill:${item.skills}">
+                                                <th:block th:each="askill : ${item.skills}">
                                                     <tr>
                                                         <td><a th:text="${askill.skill}" th:href="@{|/update/${item.id}?type=job|}"></a></td>
                                                         <!--<td><a th:text="${askill.rating}" th:href="@{|/update/${item.id}?type=job|}"></a></td>-->

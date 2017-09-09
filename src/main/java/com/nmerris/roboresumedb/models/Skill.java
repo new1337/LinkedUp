@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
-public class Skill {
+public class Skill implements Comparable<Skill> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +30,7 @@ public class Skill {
 //    private Person myPerson;
 
     // Skill owns Job
-    @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "skills", fetch = FetchType.EAGER)
     private Collection<Job> jobs;
 
     @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
@@ -59,6 +59,14 @@ public class Skill {
         jobs = new HashSet<>();
         persons = new HashSet<>();
     }
+
+    // just compare by ids, could compare with anything we want
+    @Override
+    public int compareTo(Skill other) {
+        return getSkill().compareToIgnoreCase(other.getSkill());
+    }
+
+
 
 
     public long getId() {
