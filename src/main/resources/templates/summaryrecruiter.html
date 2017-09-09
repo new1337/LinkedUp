@@ -29,14 +29,14 @@
 
                         <tbody>
                             <th:block th:each="item:${person.jobs}">
-                                <td th:text="item.title"></td>
-                                <td th:text="item.employer"></td>
-                                <td th:text="item.minSalary"></td>
-                                <td th:text="item.description"></td>
+                                <td th:text="${item.title}"></td>
+                                <td th:text="${item.employer}"></td>
+                                <td th:text="${item.minSalary}"></td>
+                                <td th:text="${item.description}"></td>
 
                                 <!-- ??????????????????????????????? -->
                                 <th:block th:each="askill:${item.skills}">
-                                    <td th:text="askill.skill"></td>
+                                    <td th:text="${askill.skill}"></td>
                                 </th:block>
                             </th:block>
                         </tbody>
