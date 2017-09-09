@@ -135,8 +135,8 @@ public class MainController {
 
         // always need to login after registering
         // after successfully logging in, user will see their summary page via the /summary route
-        return "redirect:/";
-//        return "login";
+//        return "redirect:/";
+        return "login";
 
     }
 
@@ -155,7 +155,7 @@ public class MainController {
 
         // remove all items from repos
         educationRepo.removeAllByMyPersonIs(p);
-        skillRepo.removeAllByMyPersonIs(p);
+//        skillRepo.removeAllByMyPersonIs(p);
         workExperienceRepo.removeAllByMyPersonIs(p);
 
         return "redirect:/editdetails";
@@ -479,8 +479,8 @@ public class MainController {
         // get the current Person
         Person p = personRepo.findOne(currPerson.getPersonId());
 
-        model.addAttribute("disableSubmit", skillRepo.countAllByMyPersonIs(p) >= 20);
-        model.addAttribute("currentNumRecords", skillRepo.countAllByMyPersonIs(p));
+//        model.addAttribute("disableSubmit", skillRepo.countAllByMyPersonIs(p) >= 20);
+//        model.addAttribute("currentNumRecords", skillRepo.countAllByMyPersonIs(p));
 
         NavBarState pageState = getPageLinkState();
         pageState.setHighlightSkillNav(true);
@@ -508,8 +508,8 @@ public class MainController {
         Person p = personRepo.findOne(currPerson.getPersonId());
 
         // get the current count from work repo for the current Person
-        long count = skillRepo.countAllByMyPersonIs(p);
-        System.out.println("=========================================== repo count for currPerson is: " + count);
+//        long count = skillRepo.countAllByMyPersonIs(p);
+//        System.out.println("=========================================== repo count for currPerson is: " + count);
 
         addPersonNameToModel(model);
 
@@ -517,27 +517,27 @@ public class MainController {
             NavBarState pageState = getPageLinkState();
             pageState.setHighlightSkillNav(true);
             model.addAttribute("pageState", pageState);
-            model.addAttribute("currentNumRecords", count);
-            model.addAttribute("disableSubmit", count >= 20);
+//            model.addAttribute("currentNumRecords", count);
+//            model.addAttribute("disableSubmit", count >= 20);
 
             return "addskill";
         }
 
-        if(count < 20) {
+//        if(count < 20) {
             System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% about to save skill to Repo");
             skillRepo.save(skill);
 
-            count = skillRepo.countAllByMyPersonIs(p);
-            System.out.println("=========================================== repo count for currPerson is: " + count);
-        }
+//            count = skillRepo.countAllByMyPersonIs(p);
+//            System.out.println("=========================================== repo count for currPerson is: " + count);
+//        }
 
         NavBarState pageState = getPageLinkState();
         pageState.setHighlightSkillNav(true);
         model.addAttribute("pageState", pageState);
 
-        model.addAttribute("currentNumRecords", count);
+//        model.addAttribute("currentNumRecords", count);
         model.addAttribute("skillJustAdded", skill);
-        model.addAttribute("disableSubmit", count >= 20);
+//        model.addAttribute("disableSubmit", count >= 20);
 
         return "addskillconfirmation";
     }
@@ -556,7 +556,7 @@ public class MainController {
         model.addAttribute("person", p);
         model.addAttribute("edAchievements", educationRepo.findAllByMyPersonIs(p));
         model.addAttribute("workExperiences", workExperienceRepo.findAllByMyPersonIs(p));
-        model.addAttribute("skills", skillRepo.findAllByMyPersonIs(p));
+//        model.addAttribute("skills", skillRepo.findAllByMyPersonIs(p));
 
         NavBarState pageState = getPageLinkState();
         pageState.setHighlightEditNav(true);
@@ -676,7 +676,7 @@ public class MainController {
                 return "addworkexperience";
             case "skill" :
                 model.addAttribute("newSkill", skillRepo.findOne(id));
-                model.addAttribute("currentNumRecords", skillRepo.countAllByMyPersonIs(p));
+//                model.addAttribute("currentNumRecords", skillRepo.countAllByMyPersonIs(p));
                 pageState.setHighlightSkillNav(true);
                 model.addAttribute("pageState", pageState);
                 return "addskill";
@@ -723,20 +723,20 @@ public class MainController {
             // if this line is reached, then there must be a Person already entered
 
             // add the current table counts, so the navbar badges know what to display
-            state.setNumSkills(skillRepo.countAllByMyPersonIs(p));
+//            state.setNumSkills(skillRepo.countAllByMyPersonIs(p));
             state.setNumWorkExps(workExperienceRepo.countAllByMyPersonIs(p));
             state.setNumEdAchievements(educationRepo.countAllByMyPersonIs(p));
 
             // disable links as necessary... don't allow them to click any links if the repos contain too many records
             state.setDisableAddEdLink(educationRepo.countAllByMyPersonIs(p) >= 10);
-            state.setDisableAddSkillLink(skillRepo.countAllByMyPersonIs(p) >= 20);
+//            state.setDisableAddSkillLink(skillRepo.countAllByMyPersonIs(p) >= 20);
             state.setDisableAddWorkExpLink(workExperienceRepo.countAllByMyPersonIs(p) >= 10);
 
             // enable the edit details link... the user has already entered a Person, so it's ok to to allow them to edit
             state.setDisableEditDetailsLink(false);
 
             // disable show final resume link until at least one ed achievement, skill, and personal info has been entered
-            state.setDisableShowFinalLink(skillRepo.countAllByMyPersonIs(p) == 0 || educationRepo.countAllByMyPersonIs(p) == 0);
+//            state.setDisableShowFinalLink(skillRepo.countAllByMyPersonIs(p) == 0 || educationRepo.countAllByMyPersonIs(p) == 0);
         }
         else {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! p == null in getPageLinkState, so must not have found a Person in personRepo");

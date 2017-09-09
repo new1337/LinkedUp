@@ -39,7 +39,7 @@ public class Job {
 
 
     // Skill is owner of Job
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "job_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private Collection<Skill> skills;
 

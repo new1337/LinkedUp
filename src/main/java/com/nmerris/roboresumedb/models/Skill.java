@@ -1,6 +1,8 @@
 package com.nmerris.roboresumedb.models;
 
+import org.hibernate.annotations.ManyToAny;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.jmx.export.annotation.ManagedMetric;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -23,17 +25,17 @@ public class Skill {
     private String rating;
 
     // Person owns Skill
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id")
-    private Person myPerson;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "person_id")
+//    private Person myPerson;
 
     // Skill owns Job
     @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
     private Collection<Job> jobs;
 
+    @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
+    private Collection<Person> persons;
 
-//    @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
-//    private Collection<Person> persons;
 
 //
 //    public Job getMyJob() {
@@ -55,7 +57,7 @@ public class Skill {
 
     public Skill() {
         jobs = new HashSet<>();
-//        persons = new HashSet<>();
+        persons = new HashSet<>();
     }
 
 
@@ -91,11 +93,11 @@ public class Skill {
         this.jobs = jobs;
     }
 
-    public Person getMyPerson() {
-        return myPerson;
+    public Collection<Person> getPersons() {
+        return persons;
     }
 
-    public void setMyPerson(Person myPerson) {
-        this.myPerson = myPerson;
+    public void setPersons(Collection<Person> persons) {
+        this.persons = persons;
     }
 }

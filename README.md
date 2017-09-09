@@ -18,9 +18,9 @@ INSERT INTO role VALUES(1, 'ROLE_USER');
 INSERT INTO role VALUES(2, 'ROLE_RECRUITER');
 INSERT INTO role VALUES(3, 'ROLE_ADMIN');
 
--- (id, rating, skill, person_id) 
-INSERT INTO skill VALUES(1, null, 'Java Programming', null);
-INSERT INTO skill VALUES(2, null, 'Bike Riding', null);
-INSERT INTO skill VALUES(3, null, 'Singing', null);
-INSERT INTO skill VALUES(4, null, 'Creative Writing', nul
+-- (id, rating, skill) 
+INSERT INTO skill VALUES(1, null, 'Java programming');
+INSERT INTO skill VALUES(2, null, 'Bike Riding');
+INSERT INTO skill VALUES(3, null, 'Singing');
+INSERT INTO skill VALUES(4, null, 'Creative Writing');
 -- etc
