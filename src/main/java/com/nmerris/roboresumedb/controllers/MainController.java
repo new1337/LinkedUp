@@ -218,7 +218,12 @@ public class MainController {
 
     @PostMapping("/addjob")
     public String addJobPost(@Valid @ModelAttribute("newJob") Job job,
-                             @RequestParam(value = "checkedIds", required = false) long[] checkedIds,
+                             @RequestParam(value = "selectedSkillNameOne", required = false) String selectedSkillNameOne,
+                             @RequestParam(value = "selectedSkillNameTwo", required = false) String selectedSkillNameTwo,
+                             @RequestParam(value = "selectedSkillNameThree", required = false) String selectedSkillNameThree,
+                             @RequestParam(value = "ratingOne", required = false) String ratingOne,
+                             @RequestParam(value = "ratingTwo", required = false) String ratingTwo,
+                             @RequestParam(value = "ratingThree", required = false) String ratingThree,
                              BindingResult bindingResult, Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addJob POST");
 
@@ -229,14 +234,27 @@ public class MainController {
             return "addjob";
         }
 
-        if(checkedIds != null) {
-            for (long id : checkedIds) {
-                job.addSkill(skillRepo.findOne(id));
-            }
+//        if(checkedIds != null) {
+//            for (long id : checkedIds) {
+//                job.addSkill(skillRepo.findOne(id));
+//            }
+//        }
+
+        if(!selectedSkillNameOne.equals("None Selected")) {
+            job.addSkill(skillRepo.findBySkillIsAndRatingIs(selectedSkillNameOne, ratingOne));
         }
-
-
+        if(!selectedSkillNameTwo.equals("None Selected")) {
+            job.addSkill(skillRepo.findBySkillIsAndRatingIs(selectedSkillNameTwo, ratingTwo));
+        }
+        if(!selectedSkillNameThree.equals("None Selected")) {
+            job.addSkill(skillRepo.findBySkillIsAndRatingIs(selectedSkillNameThree, ratingThree));
+        }
+        
+        
         job.setMyPerson(personRepo.findByUsername(principal.getName()));
+        
+        
+        
 
         jobRepo.save(job);
 
@@ -506,8 +524,8 @@ public class MainController {
 
 
         // make a Set of skill names, no duplicates in a set, user can pick from these, and also pick a rating
-        Set<String> skillNames = new HashSet<>();
-        for (Skill skill : skillRepo.findAll()) {
+        Set<String> skillNames = new LinkedHashSet<>();
+        for (Skill skill : skillRepo.findAllByOrderBySkillAsc()) {
             skillNames.add(skill.getSkill());
         }
 
