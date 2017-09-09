@@ -164,6 +164,8 @@ public class MainController {
 
     @GetMapping("/addjob")
     public String addJobGet(Model model) {
+        System.out.println("=============================================================== just entered /addJob GET");
+
         model.addAttribute("newJob", new Job());
         model.addAttribute("skills", skillRepo.findAll());
 

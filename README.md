@@ -23,4 +23,9 @@ INSERT INTO skill VALUES(1, null, 'Java programming');
 INSERT INTO skill VALUES(2, null, 'Bike Riding');
 INSERT INTO skill VALUES(3, null, 'Singing');
 INSERT INTO skill VALUES(4, null, 'Creative Writing');
--- etc
+
+INSERT INTO person VALUES(1, 'a@b.com', 1, 'RecruiterJim', 'LastName', 'pass', 'rec');
+INSERT INTO person VALUES(2, 'y@z.com', 1, 'UserSue', 'LastName', 'pass', 'user');
+
+INSERT INTO person_roles VALUES(1, 2);
+INSERT INTO person_roles VALUES(2, 1);

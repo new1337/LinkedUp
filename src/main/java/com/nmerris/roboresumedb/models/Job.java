@@ -25,12 +25,12 @@ public class Job {
     @Size(max = 50)
     private String employer;
 
-    @Min(0)
-    @Max(10000000)
+//    @Min(0)
+    @Max(1000000)
     private long minSalary;
 
-    @Min(0)
-    @Max(10000000)
+//    @Min(0)
+    @Max(1000000)
     private long maxSalary;
 
     @NotEmpty
