@@ -281,9 +281,9 @@ public class MainController {
         // the parent relationship data is lost when the Person comes back from the form, so need to reattach is all
         // here or it goes poof (and would loose skills and roles)
 
-        Set<Role> rolesToPreserve = roleRepo.findAllByPersonsIs(personFromForm);
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! got these roles for personFromForm: " + rolesToPreserve);
-        personFromForm.setRoles(rolesToPreserve);
+//        Set<Role> rolesToPreserve = roleRepo.findAllByPersonsIs(personFromForm);
+//        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! got these roles for personFromForm: " + rolesToPreserve);
+        personFromForm.setRoles(roleRepo.findAllByPersonsIs(personFromForm));
 
 //        personFromForm.addRole(personRepo.findByUsername(principal.getName()).getRole());
         personRepo.save(personFromForm);
