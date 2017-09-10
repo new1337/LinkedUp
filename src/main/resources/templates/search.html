@@ -4,7 +4,14 @@
 <head th:replace="fragments :: headerFragment"></head>
 <body>
 
-<nav th:replace="fragments :: navbar(${pageState})"></nav>
+<div th:switch="${navType}">
+    <div th:case="'recruiter'">
+        <nav th:replace="fragments :: recruiterNavbar(false, false, true)"></nav>
+    </div>
+    <div th:case="'user'">
+        <nav th:replace="fragments :: navbar(${pageState})"></nav>
+    </div>
+</div>
 
 <div class="container">
     <div class="col-lg-6 col-lg-offset-3">

@@ -159,19 +159,29 @@ public class MainController {
     public String searchGet(Model model, Principal principal) {
         System.out.println("=============================================================== just entered /search GET");
 
-        // can't get thymeleaf sec:authorize to work, so have to workaround, it is behaving inconsistently
-        // it ALWAYS rendered ROLE_USER, no matter what
-        switch(personRepo.findByUsername(principal.getName()).getRole()) {
-            case "ROLE_USER" :
-                model.addAttribute("pageState", getPageLinkState(personRepo.findByUsername(principal.getName())));
-                return "searchuser";
 
-            case "ROLE_RECRUITER" :
-                return "searchrecruiter";
+        if(personRepo.findByUsername(principal.getName()).getRole().equals("ROLE_USER")) {
+            model.addAttribute("navType", "user");
+        }
+        else {
+            model.addAttribute("navType", "recruiter");
         }
 
+
+        // can't get thymeleaf sec:authorize to work, so have to workaround, it is behaving inconsistently
+        // it ALWAYS rendered ROLE_USER, no matter what
+//        switch(personRepo.findByUsername(principal.getName()).getRole()) {
+//            case "ROLE_USER" :
+                model.addAttribute("pageState", getPageLinkState(personRepo.findByUsername(principal.getName())));
+//                return "searchuser";
+//
+//            case "ROLE_RECRUITER" :
+//                return "searchrecruiter";
+//        }
+
         // should never happen
-        return "redirect:/";
+        return "search";
+//        return "redirect:/";
     }
 
 
@@ -195,7 +205,6 @@ public class MainController {
         }
         else {
             model.addAttribute("navType", "recruiter");
-
         }
 
         // display msg if user entered nothing and then clicked submit
