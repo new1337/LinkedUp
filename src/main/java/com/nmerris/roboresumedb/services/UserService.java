@@ -33,19 +33,32 @@ public class UserService {
         return personRepo.findByEmail(email);
     }
 
-    public void saveUser(Person user) {
+    // returns 0 if any problems (ie if username already taken), 1 if ok
+    public int saveUser(Person user) {
         System.out.println("============================= UserService.saveUser, just got user.username: " + user.getUsername());
 
+        if(personRepo.countByUsername(user.getUsername()) > 0) {
+            // username already exists, display an appropriate error message
+            return 0;
+        }
         user.addRole(roleRepo.findByRole("ROLE_USER"));
         // overrode toString in Role, so should print out role string here
         System.out.println("=================== adding role to user: " + roleRepo.findByRole("ROLE_USER"));
         user.setEnabled(true);
         personRepo.save(user);
         System.out.println("=================== just saved user to repo");
+        return 1;
     }
 
-    public void saveRecruiter(Person user) {
+    // returns 0 if any problems (ie if username already taken), 1 if ok
+    public int saveRecruiter(Person user) {
         System.out.println("============================= UserService.saveRecruiter, just got user.username: " + user.getUsername());
+
+        if(personRepo.countByUsername(user.getUsername()) > 0) {
+            // username already exists, display an appropriate error message
+            return 0;
+        }
+
 
         user.addRole(roleRepo.findByRole("ROLE_RECRUITER"));
         // overrode toString in Role, so should print out role string here
@@ -53,6 +66,7 @@ public class UserService {
         user.setEnabled(true);
         personRepo.save(user);
         System.out.println("=================== just saved user to repo");
+        return 1;
     }
 
 }

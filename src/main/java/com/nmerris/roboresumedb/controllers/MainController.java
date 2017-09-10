@@ -118,15 +118,24 @@ public class MainController {
         if(bindingResult.hasErrors()) {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!) BINDING RESULT ERROR");
 
+            // TODO also check if username already exists, display msg along with other validation error msgs
             return "register";
         }
         else {
             if(role.equals("ROLE_USER")) {
-                userService.saveUser(user);
+                if(userService.saveUser(user) == 0) {
+                    // username was already taken, display appropriate error msg
+                    // if saveUser returns 0, the user was not saved at all
+                    model.addAttribute("usernameAlreadyExists", true);
+                    return "register";
+                }
             }
             else {
                 // must be ROLE_RECRUITER
-                userService.saveRecruiter(user);
+                if(userService.saveRecruiter(user) == 0) {
+                    model.addAttribute("usernameAlreadyExists", true);
+                    return "register";
+                }
             }
         }
 
