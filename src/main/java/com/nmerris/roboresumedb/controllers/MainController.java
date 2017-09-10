@@ -266,7 +266,7 @@ public class MainController {
 
 //        model.addAttribute("message", "Successfully posted a new job");
 
-        model.addAttribute("jobJustAdded", job);
+        model.addAttribute("jobJustAdded", jobRepo.findOne(job.getId()));
         model.addAttribute("highLightPostJob", true);
         model.addAttribute("highLightPostList", false);
         model.addAttribute("highLightSearch", false);
