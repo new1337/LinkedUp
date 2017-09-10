@@ -4,6 +4,8 @@ import com.nmerris.roboresumedb.models.EducationAchievement;
 import com.nmerris.roboresumedb.models.Person;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.LinkedHashSet;
+
 public interface EducationRepo extends CrudRepository<EducationAchievement, Long> {
 
     // returns all the records associated with currentPerson
@@ -14,5 +16,7 @@ public interface EducationRepo extends CrudRepository<EducationAchievement, Long
 
     // returns the number of removed records
     long removeAllByMyPersonIs(Person currentPerson);
+
+    LinkedHashSet<EducationAchievement> findBySchoolContainsOrderBySchoolAsc(String school);
 
 }

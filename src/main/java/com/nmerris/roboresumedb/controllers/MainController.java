@@ -258,11 +258,9 @@ public class MainController {
                 break;
 
             case "schools" :
-
-
-
-
-
+                // find all eds that have school name fields that contain the search string
+                model.addAttribute("searchResults", educationRepo.findBySchoolContainsOrderBySchoolAsc(searchString));
+                model.addAttribute("tableType", "school");
 
         }
 

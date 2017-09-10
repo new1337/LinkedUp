@@ -92,11 +92,31 @@
                         </table>
                     </div>
 
+                    <!-- company table -->
+                    <div th:case="'school'" class="table-responsive">
+                        <table class="table table-hover">
+                            <caption><h3><b>Found these schools</b></h3></caption>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <!-- TODO list people who are associated with each school... just not enough time to do it all -->
+                                    <!--<th>Job Title</th>-->
+                                    <!--<th>Description</th>-->
+                                    <!--<th>Salary Range</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="item : ${searchResults}">
+                                    <td th:text="${item.school}"></td>
+                                    <!--<td th:text="${item.title}"></td>-->
+                                    <!--<td th:text="${item.description}"></td>-->
+                                    <!--<td th:text="'$' + ${item.minSalary} + ' - $' + ${item.maxSalary}"></td>-->
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
 
-
-
-
-                </div>
+                </div><!-- th:switch -->
 
             </div><!-- panel-body -->
         </div>
