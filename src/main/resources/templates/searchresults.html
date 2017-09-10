@@ -5,12 +5,14 @@
 
 <body>
 
-<!--<div sec:authorize="hasRole('ROLE_RECRUITER')">-->
-    <!--<nav th:replace="fragments :: recruiterNavbar(false, false, true)"></nav>-->
-<!--</div>-->
-<!--<div th:if="${pageState} == null" th:remove="all" sec:authorize="hasRole('ROLE_USER')">-->
-    <!--<nav th:replace="fragments :: navbar(${pageState})"></nav>-->
-<!--</div>-->
+<div th:switch="${navType}">
+    <div th:case="'recruiter'">
+        <nav th:replace="fragments :: recruiterNavbar(false, false, true)"></nav>
+    </div>
+    <div th:case="'user'">
+        <nav th:replace="fragments :: navbar(${pageState})"></nav>
+    </div>
+</div>
 
 <div class="container">
     <div class="col-lg-8 col-lg-offset-2">

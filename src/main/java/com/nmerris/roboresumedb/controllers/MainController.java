@@ -184,11 +184,18 @@ public class MainController {
         System.out.println("============================================== search type: " + type);
         System.out.println("============================================== search string: " + searchString);
 
+        model.addAttribute("pageState", getPageLinkState(personRepo.findByUsername(principal.getName())));
+
 
         // add the navbar state object to the model if logged in role is USER
         // note: the recruiter navbar does not need any fancy state object
         if(personRepo.findByUsername(principal.getName()).getRole().equals("ROLE_USER")) {
-            model.addAttribute("pageState", getPageLinkState(personRepo.findByUsername(principal.getName())));
+//            model.addAttribute("pageState", getPageLinkState(personRepo.findByUsername(principal.getName())));
+            model.addAttribute("navType", "user");
+        }
+        else {
+            model.addAttribute("navType", "recruiter");
+
         }
 
         // display msg if user entered nothing and then clicked submit
