@@ -106,10 +106,9 @@ public class MainController {
 
 
     @PostMapping("/register")
-    public String processRegistration(@RequestParam(value = "selectedRole") String role,
-                                      @Valid @ModelAttribute("newPerson") Person user,
-                                      BindingResult bindingResult,
-                                      Model model) {
+    public String processRegistration(@Valid @ModelAttribute("newPerson") Person user,
+                                      BindingResult bindingResult, Model model,
+                                      @RequestParam(value = "selectedRole") String role) {
 
         System.out.println("####################### /register POST... incoming role String is: " + role);
 
@@ -117,7 +116,9 @@ public class MainController {
         model.addAttribute("newPerson", user);
 
         if(bindingResult.hasErrors()) {
-            return "registration";
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!) BINDING RESULT ERROR");
+
+            return "register";
         }
         else {
             if(role.equals("ROLE_USER")) {

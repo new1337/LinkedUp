@@ -35,7 +35,6 @@ public class Person implements Comparable<Person> {
     private String password;
 
     // all usernames must be unique
-    // TODO handle error when this happens, must provide user feedback in register form
     @NotEmpty
     @Column(unique = true)
     private String username;
