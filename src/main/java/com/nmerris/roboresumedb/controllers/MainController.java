@@ -118,7 +118,11 @@ public class MainController {
         if(bindingResult.hasErrors()) {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!) BINDING RESULT ERROR");
 
-            // TODO also check if username already exists, display msg along with other validation error msgs
+            if(personRepo.countByUsername(user.getUsername()) > 0) {
+                // in addition to other validation errors, the selected username already exists, so display
+                // a custom error message
+                model.addAttribute("usernameAlreadyExists", true);
+            }
             return "register";
         }
         else {
