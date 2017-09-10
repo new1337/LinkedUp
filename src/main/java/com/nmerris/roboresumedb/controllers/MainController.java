@@ -226,6 +226,12 @@ public class MainController {
                              @RequestParam(value = "ratingThree", required = false) String ratingThree,
                              BindingResult bindingResult, Model model, Principal principal) {
         System.out.println("=============================================================== just entered /addJob POST");
+        System.out.println("============ selectedSkillNameOne: " + selectedSkillNameOne);
+        System.out.println("======= ratingOne: " + ratingOne);
+        System.out.println("============ selectedSkillNameTwo: " + selectedSkillNameTwo);
+        System.out.println("======= ratingTwo: " + ratingTwo);
+        System.out.println("============ selectedSkillNameThree: " + selectedSkillNameThree);
+        System.out.println("======= ratingThree: " + ratingThree);
 
 
         if(bindingResult.hasErrors()) {
