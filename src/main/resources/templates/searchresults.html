@@ -1,94 +1,102 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head th:replace="fragments :: headerFragment"></head>
 
 <body>
 
-<div sec:authorize="hasRole('ROLE_RECRUITER')">
-    <nav th:replace="fragments :: recruiterNavbar(false, false, true)"></nav>
-</div>
-<div sec:authorize="hasRole('ROLE_USER')">
-    <nav th:replace="fragments :: navbar(${pageState})"></nav>
-</div>
+<!--<div sec:authorize="hasRole('ROLE_RECRUITER')">-->
+    <!--<nav th:replace="fragments :: recruiterNavbar(false, false, true)"></nav>-->
+<!--</div>-->
+<!--<div th:if="${pageState} == null" th:remove="all" sec:authorize="hasRole('ROLE_USER')">-->
+    <!--<nav th:replace="fragments :: navbar(${pageState})"></nav>-->
+<!--</div>-->
 
 <div class="container">
     <div class="col-lg-8 col-lg-offset-2">
         <div class="panel panel-default card card-3">
             <div class="panel-body">
 
-                <!-- show person table if search was for people -->
-                <!-- otherwise remove the elements completely with th:remove.. amazing! -->
-                <div class="table-responsive" th:if="!${showPersonTable}" th:remove="all">
-                <!--<div class="table-responsive" th:if="!${showPersonTable}" th:classappend="${'hide-me'}">-->
-                    <table class="table table-hover">
-                        <caption><h3><b>Found these people</b></h3></caption>
-                        <thead>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <th:block th:each="item : ${searchResults}">
-                                <td th:text="${item.nameFirst}"></td>
-                                <td th:text="${item.nameLast}"></td>
-                                <td th:text="${item.email}"></td>
-                            </th:block>
-                        </tbody>
-                    </table>
-                </div>
 
-                <!-- job table -->
-                <div class="table-responsive" th:if="!${showJobsTable}" th:remove="all">
-                    <table class="table table-hover">
-                        <caption><h3><b>Found these jobs</b></h3></caption>
-                        <thead>
+
+                <div th:switch="${tableType}">
+
+                    <!-- show person table if search was for people -->
+                    <!-- otherwise remove the elements completely with th:remove.. amazing! -->
+                    <div th:case="'person'" class="table-responsive">
+                    <!--<div class="table-responsive" th:if="!${showPersonTable}" th:classappend="${'hide-me'}">-->
+                        <table class="table table-hover">
+                            <caption><h3><b>Found these people</b></h3></caption>
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="item : ${searchResults}">
+                                    <td th:text="${item.nameFirst}"></td>
+                                    <td th:text="${item.nameLast}"></td>
+                                    <td th:text="${item.email}"></td>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                    <!-- job table -->
+                    <div th:case="'job'" class="table-responsive">
+                        <table class="table table-hover">
+                            <caption><h3><b>Found these jobs</b></h3></caption>
+                            <thead>
                             <tr>
                                 <th>Job Title</th>
                                 <th>Company</th>
                                 <th>Description</th>
                                 <th>Salary Range</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             <th:block th:each="item : ${searchResults}">
                                 <td th:text="${item.title}"></td>
                                 <td th:text="${item.employer}"></td>
                                 <td th:text="${item.description}"></td>
                                 <td th:text="'$' + ${item.minSalary} + ' - $' + ${item.maxSalary}"></td>
                             </th:block>
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <!-- company table -->
-                <div class="table-responsive" th:if="!${showCompanyTable}" th:remove="all">
-                    <table class="table table-hover">
-                        <caption><h3><b>Found these companies - here are their job listings</b></h3></caption>
-                        <thead>
+                    <!-- company table -->
+                    <div th:case="'company'" class="table-responsive">
+                        <table class="table table-hover">
+                            <caption><h3><b>Found these companies - here are their job listings</b></h3></caption>
+                            <thead>
                             <tr>
                                 <th>Company</th>
                                 <th>Job Title</th>
                                 <th>Description</th>
                                 <th>Salary Range</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             <th:block th:each="item : ${searchResults}">
                                 <td th:text="${item.employer}"></td>
                                 <td th:text="${item.title}"></td>
                                 <td th:text="${item.description}"></td>
                                 <td th:text="'$' + ${item.minSalary} + ' - $' + ${item.maxSalary}"></td>
                             </th:block>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
+
                 </div>
-
-
-
-
 
             </div><!-- panel-body -->
         </div>

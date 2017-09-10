@@ -1,15 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org">
 
 <head th:replace="fragments :: headerFragment"></head>
 <body>
 
-<div sec:authorize="hasRole('ROLE_RECRUITER')">
-    <nav th:replace="fragments :: recruiterNavbar(false, false, true)"></nav>
-</div>
-<div th:if="${pageState} == null" th:remove="all" sec:authorize="hasRole('ROLE_USER')">
-    <nav th:replace="fragments :: navbar(${pageState})"></nav>
-</div>
+<nav th:replace="fragments :: navbar(${pageState})"></nav>
 
 <div class="container">
     <div class="col-lg-6 col-lg-offset-3">

@@ -43,6 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/add*", "/startover", "/editdetails", "/delete/*", "/update/*", "/finalresume",
                         "/course*", "/student*", "/summary")
                     .access("hasRole('ROLE_USER') or hasRole('ROLE_RECRUITER')")
+//                    .access("hasRole('ROLE_USER') or hasRole('ROLE_RECRUITER')")
                 .anyRequest().authenticated();
 
 

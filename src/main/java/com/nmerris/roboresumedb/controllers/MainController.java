@@ -159,13 +159,19 @@ public class MainController {
     public String searchGet(Model model, Principal principal) {
         System.out.println("=============================================================== just entered /search GET");
 
-        // add the navbar state object to the model if logged in role is USER
-        // note: the recruiter navbar does not need any fancy state object
-        if(personRepo.findByUsername(principal.getName()).getRole().equals("ROLE_USER")) {
-            model.addAttribute("pageState", getPageLinkState(personRepo.findByUsername(principal.getName())));
+        // can't get thymeleaf sec:authorize to work, so have to workaround, it is behaving inconsistently
+        // it ALWAYS rendered ROLE_USER, no matter what
+        switch(personRepo.findByUsername(principal.getName()).getRole()) {
+            case "ROLE_USER" :
+                model.addAttribute("pageState", getPageLinkState(personRepo.findByUsername(principal.getName())));
+                return "searchuser";
+
+            case "ROLE_RECRUITER" :
+                return "searchrecruiter";
         }
 
-        return "search";
+        // should never happen
+        return "redirect:/";
     }
 
 
@@ -220,19 +226,19 @@ public class MainController {
                 }
 
                 model.addAttribute("searchResults", searchResults);
-                model.addAttribute("showPersonTable", true);
+                model.addAttribute("tableType", "person");
                 break;
 
             case "jobs" :
                 // find all jobs that have title fields that contain the search string
                 model.addAttribute("searchResults", jobRepo.findByTitleContainingOrderByTitleAsc(searchString));
-                model.addAttribute("showJobTable", true);
+                model.addAttribute("tableType", "job");
                 break;
 
             case "companies" :
                 // find all jobs that have company fields that contain the search string
                 model.addAttribute("searchResults", jobRepo.findByEmployerContainingOrderByEmployerAsc(searchString));
-                model.addAttribute("showCompanyTable", true);
+                model.addAttribute("tableType", "company");
                 break;
 
             case "schools" :
