@@ -27,7 +27,7 @@
 
                         <!-- TODO can't #lists.sort here, get a LAZY fetch exception... would be nice to list in alphabetical order -->
                         <th:block th:each = "item : ${jobJustAdded.skills}">
-                            <li class="list-group-item" th:text="${'Skill: ' + item.skill}"></li>
+                            <li class="list-group-item" th:text="${'Skill: ' + item.skill + ' - ' + item.rating}"></li>
                         </th:block>
                     </ul>
                 </div>
