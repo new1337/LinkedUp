@@ -7,7 +7,7 @@
 <div sec:authorize="hasRole('ROLE_RECRUITER')">
     <nav th:replace="fragments :: recruiterNavbar(false, false, true)"></nav>
 </div>
-<div sec:authorize="hasRole('ROLE_USER')">
+<div th:if="${pageState} == null" th:remove="all" sec:authorize="hasRole('ROLE_USER')">
     <nav th:replace="fragments :: navbar(${pageState})"></nav>
 </div>
 

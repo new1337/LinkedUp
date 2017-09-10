@@ -41,12 +41,27 @@
                 </div>
 
                 <!-- job table -->
-
-
-
-
-
-
+                <div class="table-responsive" th:if="!${showJobsTable}" th:remove="all">
+                    <table class="table table-hover">
+                        <caption><h3><b>Found these jobs</b></h3></caption>
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Company</th>
+                                <th>Description</th>
+                                <th>Salary Range</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <th:block th:each="item : ${searchResults}">
+                                <td th:text="${item.title}"></td>
+                                <td th:text="${item.employer}"></td>
+                                <td th:text="${item.description}"></td>
+                                <td th:text="'$' + ${item.minSalary} + ' - $' + ${item.maxSalary}"></td>
+                            </th:block>
+                        </tbody>
+                    </table>
+                </div>
 
                 <!-- company table -->
                 <div class="table-responsive" th:if="!${showCompanyTable}" th:remove="all">

@@ -13,6 +13,9 @@ public interface JobRepo extends CrudRepository<Job, Long> {
 
     Collection<Job> findAllByMyPersonIs(Person person);
 
-    LinkedHashSet<Job> findByEmployerContainingOrderByEmployerAsc(String company);
+    // linked hash set: no duplicates AND retains order
+    LinkedHashSet<Job> findByEmployerContainingOrderByEmployerAsc(String employer);
+
+    LinkedHashSet<Job> findByTitleContainingOrderByTitleAsc(String jobTitle);
 
 }

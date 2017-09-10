@@ -224,17 +224,14 @@ public class MainController {
                 break;
 
             case "jobs" :
-
-
+                // find all jobs that have title fields that contain the search string
+                model.addAttribute("searchResults", jobRepo.findByTitleContainingOrderByTitleAsc(searchString));
+                model.addAttribute("showJobTable", true);
                 break;
 
             case "companies" :
                 // find all jobs that have company fields that contain the search string
-                LinkedHashSet<Job> searchResults2 = jobRepo.findByEmployerContainingOrderByEmployerAsc(searchString);
-
-                System.out.println("++++++++++++++++++++ company search result size: " + searchResults2.size());
-
-                model.addAttribute("searchResults", searchResults2);
+                model.addAttribute("searchResults", jobRepo.findByEmployerContainingOrderByEmployerAsc(searchString));
                 model.addAttribute("showCompanyTable", true);
                 break;
 
