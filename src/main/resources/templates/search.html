@@ -12,6 +12,7 @@
             <div class="panel-body">
 
                 <p th:if="${emptySearchString}" class="alert alert-danger text-center" th:text="${'Please enter something to search for'}"></p>
+                <p th:if="${tooManyNames}" class="alert alert-danger text-center" th:text="${'Please enter only a first or last name, or both'}"></p>
 
                 <!-- search for people -->
                 <form action="#" th:action="@{~/search}" method="post">

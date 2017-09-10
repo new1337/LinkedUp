@@ -185,9 +185,21 @@ public class MainController {
 
         switch (type) {
             case "people" :
-                // split the string into parts, seperate by space
+                // split the string into parts, separate by space
                 String[] parts = searchString.split(" ");
 
+                // if user entered more than 2 parts, for now we will just display msg saying they can't do that
+                if(parts.length > 2) {
+                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! more than 2 names entered");
+                    model.addAttribute("tooManyNames", true);
+                    return  "search";
+                }
+
+                // user entered either a first or last name, we don't know which, so query db by both
+                if(parts.length == 1) {
+                    LinkedHashSet<Person> searchResults = personRepo.findByNameFirstIsOrNameLastIsOrderByNameLastAsc(searchString, searchString);
+                    System.out.println("================== parts.length was 1... searchResults.size: " + searchResults.size());
+                }
 
 
 
