@@ -156,10 +156,14 @@ public class MainController {
 
 
     @GetMapping("/search")
-    public String searchGet(Model model) {
+    public String searchGet(Model model, Principal principal) {
         System.out.println("=============================================================== just entered /search GET");
 
-//        model.addAttribute("emptySearchString", false);
+        // add the navbar state object to the model if logged in role is USER
+        // note: the recruiter navbar does not need any fancy state object
+        if(personRepo.findByUsername(principal.getName()).getRole().equals("ROLE_USER")) {
+            model.addAttribute("pageState", getPageLinkState(personRepo.findByUsername(principal.getName())));
+        }
 
         return "search";
     }
@@ -167,13 +171,19 @@ public class MainController {
 
 
     @PostMapping("/search")
-    public String searchPost(Model model,
+    public String searchPost(Model model, Principal principal,
                              @RequestParam(value = "type", required = false) String type,
                              @RequestParam(value = "searchString", required = false) String searchString) {
         System.out.println("=============================================================== just entered /search POST");
         System.out.println("============================================== search type: " + type);
         System.out.println("============================================== search string: " + searchString);
 
+
+        // add the navbar state object to the model if logged in role is USER
+        // note: the recruiter navbar does not need any fancy state object
+        if(personRepo.findByUsername(principal.getName()).getRole().equals("ROLE_USER")) {
+            model.addAttribute("pageState", getPageLinkState(personRepo.findByUsername(principal.getName())));
+        }
 
         // display msg if user entered nothing and then clicked submit
         if(searchString.equals("")) {
@@ -183,10 +193,12 @@ public class MainController {
         }
 
 
+
         switch (type) {
             case "people" :
                 // split the string into parts, separate by space
                 String[] parts = searchString.split(" ");
+                LinkedHashSet<Person> searchResults;
 
                 // if user entered more than 2 parts, for now we will just display msg saying they can't do that
                 if(parts.length > 2) {
@@ -195,15 +207,20 @@ public class MainController {
                     return  "search";
                 }
 
+
                 // user entered either a first or last name, we don't know which, so query db by both
                 if(parts.length == 1) {
-                    LinkedHashSet<Person> searchResults = personRepo.findByNameFirstIsOrNameLastIsOrderByNameLastAsc(searchString, searchString);
+                    searchResults = personRepo.findByNameFirstIsOrNameLastIsOrderByNameLastAsc(searchString, searchString);
                     System.out.println("================== parts.length was 1... searchResults.size: " + searchResults.size());
                 }
+                else {
+                    // user must have entered exactly 2 names, assume first  one entered was first name, second was last name
+                    searchResults = personRepo.findByNameFirstIsAndNameLastIsOrderByNameLastAsc(parts[0], parts[1]);
+                    System.out.println("================== parts.length was 2... searchResults.size: " + searchResults.size());
+                }
 
-
-
-
+                model.addAttribute("searchResults", searchResults);
+                model.addAttribute("showPersonTable", true);
 
                 break;
             case "companies" :

@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head th:replace="fragments :: headerFragment"></head>
-<body class="work-page">
+<body>
 
-<!--<nav th:replace="fragments :: recruiterNavbar(${highLightPostJob}, ${highLightPostList}, ${highLightSearch})"></nav>-->
+<div sec:authorize="hasRole('ROLE_RECRUITER')">
+    <nav th:replace="fragments :: recruiterNavbar(false, false, true)"></nav>
+</div>
+<div sec:authorize="hasRole('ROLE_USER')">
+    <nav th:replace="fragments :: navbar(${pageState})"></nav>
+</div>
 
 <div class="container">
     <div class="col-lg-6 col-lg-offset-3">
@@ -26,37 +31,43 @@
                     <input class="btn btn-primary bold-input" type="submit" value="Search"/>
                 </form>
 
-                <!--&lt;!&ndash; search for jobs &ndash;&gt;-->
-                <!--<form action="#" th:action="@{/search}" method="post">-->
-                    <!--<div class="form-group">-->
-                        <!--<label class="section-heading" for="title">Title</label>-->
-                        <!--<input id="title" class="form-control" type="text" th:field="*{title}" autofocus/>-->
-                        <!--<p class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>-->
-                    <!--</div>-->
-                    <!--<input class="btn btn-primary bold-input" type="submit" value="Submit"/>-->
-                <!--</form>-->
+                <!-- search for jobs -->
+                <form action="#" th:action="@{~/search}" method="post">
+                    <!-- hidden input so search post route will know what repo to query -->
+                    <input type="hidden" name="type" value="jobs">
 
-                <!--&lt;!&ndash; search for companies &ndash;&gt;-->
-                <!--<form action="#" th:action="@{/search}" method="post">-->
-                    <!--<div class="form-group">-->
-                        <!--<label class="section-heading" for="title">Title</label>-->
-                        <!--<input id="title" class="form-control" type="text" th:field="*{title}" autofocus/>-->
-                        <!--<p class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>-->
-                    <!--</div>-->
-                    <!--<input class="btn btn-primary bold-input" type="submit" value="Submit"/>-->
-                <!--</form>-->
+                    <div class="form-group">
+                        <label class="section-heading" for="jobs">Search for Jobs</label>
+                        <input id="jobs" class="form-control" type="text" name="searchString"/>
+                    </div>
+                    <input class="btn btn-primary bold-input" type="submit" value="Search"/>
+                </form>
 
-                <!--&lt;!&ndash; search for schools &ndash;&gt;-->
-                <!--<form action="#" th:action="@{/search}" method="post">-->
-                    <!--<div class="form-group">-->
-                        <!--<label class="section-heading" for="title">Title</label>-->
-                        <!--<input id="title" class="form-control" type="text" th:field="*{title}" autofocus/>-->
-                        <!--<p class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>-->
-                    <!--</div>-->
-                    <!--<input class="btn btn-primary bold-input" type="submit" value="Submit"/>-->
-                <!--</form>-->
+                <!-- search for companies -->
+                <form action="#" th:action="@{~/search}" method="post">
+                    <!-- hidden input so search post route will know what repo to query -->
+                    <input type="hidden" name="type" value="companies">
+
+                    <div class="form-group">
+                        <label class="section-heading" for="companies">Search for Companies</label>
+                        <input id="companies" class="form-control" type="text" name="searchString"/>
+                    </div>
+                    <input class="btn btn-primary bold-input" type="submit" value="Search"/>
+                </form>
+
+                <!-- search for schools -->
+                <form action="#" th:action="@{~/search}" method="post">
+                    <!-- hidden input so search post route will know what repo to query -->
+                    <input type="hidden" name="type" value="schools">
+
+                    <div class="form-group">
+                        <label class="section-heading" for="schools">Search for Schools</label>
+                        <input id="schools" class="form-control" type="text" name="searchString"/>
+                    </div>
+                    <input class="btn btn-primary bold-input" type="submit" value="Search"/>
+                </form>
                 
-            </div>
+                
         </div>
     </div>
 </div><!-- container -->

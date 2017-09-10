@@ -1,26 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head th:replace="fragments :: headerFragment"></head>
 
 <body>
 
-<!--<nav th:replace="fragments :: recruiterNavbar(${highLightPostJob}, ${highLightPostList}, ${highLightSearch})"></nav>-->
+<div sec:authorize="hasRole('ROLE_RECRUITER')">
+    <nav th:replace="fragments :: recruiterNavbar(false, false, true)"></nav>
+</div>
+<div sec:authorize="hasRole('ROLE_USER')">
+    <nav th:replace="fragments :: navbar(${pageState})"></nav>
+</div>
 
 <div class="container">
     <div class="col-lg-6 col-lg-offset-3">
         <div class="panel panel-default card card-3">
             <div class="panel-body">
-                <div class="panel panel-primary">
-                    <div class="panel-heading"><h4><b>Search Results</b></h4></div>
 
-
-
+                <!-- show person table if search was for people -->
+                <div class="table-responsive" th:classappend="${showPersonTable ? '' : 'hidden'}">
+                    <table class="table table-hover">
+                        <caption><h3><b>Found these people</b></h3></caption>
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <th:block th:each="item : ${searchResults}">
+                                <td th:text="${item.nameFirst}"></td>
+                                <td th:text="${item.nameLast}"></td>
+                                <td th:text="${item.email}"></td>
+                            </th:block>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+
+            </div><!-- panel-body -->
         </div>
     </div>
-</div>
+</div><!-- container -->
 
 <!-- Footer -->
 <footer th:replace="fragments :: footer"></footer>
