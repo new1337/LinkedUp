@@ -1,12 +1,11 @@
 package com.nmerris.roboresumedb.repositories;
 
 import com.nmerris.roboresumedb.models.Person;
+import com.nmerris.roboresumedb.models.Role;
+import com.nmerris.roboresumedb.models.Skill;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 
 public interface PersonRepo extends CrudRepository<Person, Long> {
 
@@ -22,5 +21,8 @@ public interface PersonRepo extends CrudRepository<Person, Long> {
 
     // if user enters only one name, assume it could be either a first or last name
     LinkedHashSet<Person> findByNameFirstIsOrNameLastIsOrderByNameLastAsc(String name, String sameName);
+
+    // get a list of Persons who have any skill that exactly matches any of the skills
+    Collection<Person> findBySkillsIsAndRolesIs(Skill skill, Role role);
 
 }

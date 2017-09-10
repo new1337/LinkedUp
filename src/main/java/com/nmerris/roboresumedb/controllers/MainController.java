@@ -391,13 +391,20 @@ public class MainController {
         
         
         job.setMyPerson(personRepo.findByUsername(principal.getName()));
-        
-        
-        
 
         jobRepo.save(job);
 
-//        model.addAttribute("message", "Successfully posted a new job");
+
+        // get a list of all job seekers who have any skills that match this job's skill(s)
+        // note a job may have no skills
+        Role roleUser = roleRepo.findByRole("ROLE_USER");
+        LinkedHashSet<Person> matchedSeekers = new LinkedHashSet<>();
+        for (Skill skill : job.getSkills()) {
+            matchedSeekers.addAll(personRepo.findBySkillsIsAndRolesIs(skill, roleUser));
+        }
+        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% matchedSeekers.size: " + matchedSeekers.size());
+        model.addAttribute("peopleWithMatchedSkills", matchedSeekers);
+
 
         model.addAttribute("jobJustAdded", jobRepo.findOne(job.getId()));
         model.addAttribute("highLightPostJob", true);
