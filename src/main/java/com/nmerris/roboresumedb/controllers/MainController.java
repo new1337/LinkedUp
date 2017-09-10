@@ -155,6 +155,66 @@ public class MainController {
     }
 
 
+    @GetMapping("/search")
+    public String searchGet(Model model) {
+        System.out.println("=============================================================== just entered /search GET");
+
+//        model.addAttribute("emptySearchString", false);
+
+        return "search";
+    }
+
+
+
+    @PostMapping("/search")
+    public String searchPost(Model model,
+                             @RequestParam(value = "type", required = false) String type,
+                             @RequestParam(value = "searchString", required = false) String searchString) {
+        System.out.println("=============================================================== just entered /search POST");
+        System.out.println("============================================== search type: " + type);
+        System.out.println("============================================== search string: " + searchString);
+
+
+        // display msg if user entered nothing and then clicked submit
+        if(searchString.equals("")) {
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! found empty search string");
+            model.addAttribute("emptySearchString", true);
+            return "search";
+        }
+
+
+        switch (type) {
+            case "people" :
+                // split the string into parts, seperate by space
+                String[] parts = searchString.split(" ");
+
+
+
+
+
+
+                break;
+            case "companies" :
+
+                break;
+            case "jobs" :
+
+
+                break;
+            case "schools" :
+
+
+
+
+
+
+        }
+
+        return "searchresults";
+    }
+
+
+
     // wipes all the skills, work experiences, and eds from current Person, only used by job seekers
     @GetMapping("/startover")
     // Transactional is necessary to call removeAllBy.. on the repos

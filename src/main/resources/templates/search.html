@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="fragments :: headerFragment"></head>
+<body class="work-page">
+
+<!--<nav th:replace="fragments :: recruiterNavbar(${highLightPostJob}, ${highLightPostList}, ${highLightSearch})"></nav>-->
+
+<div class="container">
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="panel panel-default card card-3">
+            <div class="panel-body">
+
+                <p th:if="${emptySearchString}" class="alert alert-danger text-center" th:text="${'Please enter something to search for'}"></p>
+
+                <!-- search for people -->
+                <form action="#" th:action="@{~/search}" method="post">
+                    <!-- hidden input so search post route will know what repo to query -->
+                    <input type="hidden" name="type" value="people">
+
+                    <div class="form-group">
+                        <label class="section-heading" for="people">Search for People</label>
+                        <input id="people" class="form-control" type="text" name="searchString"/>
+                    </div>
+                    <input class="btn btn-primary bold-input" type="submit" value="Search"/>
+                </form>
+
+                <!--&lt;!&ndash; search for jobs &ndash;&gt;-->
+                <!--<form action="#" th:action="@{/search}" method="post">-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="section-heading" for="title">Title</label>-->
+                        <!--<input id="title" class="form-control" type="text" th:field="*{title}" autofocus/>-->
+                        <!--<p class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>-->
+                    <!--</div>-->
+                    <!--<input class="btn btn-primary bold-input" type="submit" value="Submit"/>-->
+                <!--</form>-->
+
+                <!--&lt;!&ndash; search for companies &ndash;&gt;-->
+                <!--<form action="#" th:action="@{/search}" method="post">-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="section-heading" for="title">Title</label>-->
+                        <!--<input id="title" class="form-control" type="text" th:field="*{title}" autofocus/>-->
+                        <!--<p class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>-->
+                    <!--</div>-->
+                    <!--<input class="btn btn-primary bold-input" type="submit" value="Submit"/>-->
+                <!--</form>-->
+
+                <!--&lt;!&ndash; search for schools &ndash;&gt;-->
+                <!--<form action="#" th:action="@{/search}" method="post">-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="section-heading" for="title">Title</label>-->
+                        <!--<input id="title" class="form-control" type="text" th:field="*{title}" autofocus/>-->
+                        <!--<p class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>-->
+                    <!--</div>-->
+                    <!--<input class="btn btn-primary bold-input" type="submit" value="Submit"/>-->
+                <!--</form>-->
+                
+            </div>
+        </div>
+    </div>
+</div><!-- container -->
+
+<!-- Footer -->
+<footer th:replace="fragments :: footer"></footer>
+
+<!-- javascript -->
+<!-- th:block goes away after processing, but what's inside stays, so it won't affect the page layout -->
+<th:block th:replace="fragments :: javaScriptTemplate"></th:block>
+
+</body>
+
+</html>

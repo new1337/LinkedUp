@@ -18,14 +18,16 @@
 
                 <form action="#" th:action="@{/addperson}" th:object="${newPerson}" method="post">
 
-                    <!--<input type="hidden" th:field="*{id}"/>-->
-                    <!--<input type="hidden" th:field="*{username}">-->
-                    <!--<input type="hidden" th:field="*{password}">-->
-                    <!--<input type="hidden" th:field="*{enabled}">-->
-                    <input type="text" th:field="*{id}"/>
-                    <input type="text" th:field="*{username}">
-                    <input type="text" th:field="*{password}">
-                    <input type="text" th:field="*{enabled}">
+                    <!-- don't like this at all... should not be passing usernames and passwords through to form -->
+                    <!-- this is why I need a seperate User entitity apart from Person -->
+                    <input type="hidden" th:field="*{id}"/>
+                    <input type="hidden" th:field="*{username}">
+                    <input type="hidden" th:field="*{password}">
+                    <input type="hidden" th:field="*{enabled}">
+                    <!--<input type="text" th:field="*{id}"/>-->
+                    <!--<input type="text" th:field="*{username}">-->
+                    <!--<input type="text" th:field="*{password}">-->
+                    <!--<input type="text" th:field="*{enabled}">-->
                     
                         <div class="form-group">
                             <label class="section-heading" for="nameFirst">First Name</label>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="fragments :: headerFragment"></head>
+
+<body>
+
+<!--<nav th:replace="fragments :: recruiterNavbar(${highLightPostJob}, ${highLightPostList}, ${highLightSearch})"></nav>-->
+
+<div class="container">
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="panel panel-default card card-3">
+            <div class="panel-body">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><h4><b>Search Results</b></h4></div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="fragments :: footer"></footer>
+
+<!-- javascript -->
+<!-- th:block goes away after processing, but what's inside stays, so it won't affect the page layout -->
+<th:block th:replace="fragments :: javaScriptTemplate"></th:block>
+
+</body>
+
+</html>
