@@ -193,7 +193,6 @@ public class MainController {
         System.out.println("=============================================================== just entered /addJob GET");
 
         model.addAttribute("newJob", new Job());
-        model.addAttribute("skills", skillRepo.findAll());
         model.addAttribute("highLightPostJob", true);
         model.addAttribute("highLightPostList", false);
         model.addAttribute("highLightSearch", false);
@@ -214,14 +213,14 @@ public class MainController {
 
 
     @PostMapping("/addjob")
-    public String addJobPost(@Valid @ModelAttribute("newJob") Job job,
+    public String addJobPost(@Valid @ModelAttribute("newJob") Job job, BindingResult bindingResult,
+                             Model model, Principal principal,
                              @RequestParam(value = "selectedSkillNameOne", required = false) String selectedSkillNameOne,
                              @RequestParam(value = "selectedSkillNameTwo", required = false) String selectedSkillNameTwo,
                              @RequestParam(value = "selectedSkillNameThree", required = false) String selectedSkillNameThree,
                              @RequestParam(value = "ratingOne", required = false) String ratingOne,
                              @RequestParam(value = "ratingTwo", required = false) String ratingTwo,
-                             @RequestParam(value = "ratingThree", required = false) String ratingThree,
-                             BindingResult bindingResult, Model model, Principal principal) {
+                             @RequestParam(value = "ratingThree", required = false) String ratingThree) {
         System.out.println("=============================================================== just entered /addJob POST");
         System.out.println("============ selectedSkillNameOne: " + selectedSkillNameOne);
         System.out.println("======= ratingOne: " + ratingOne);
@@ -232,16 +231,24 @@ public class MainController {
 
 
         if(bindingResult.hasErrors()) {
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!) BINDING RESULT ERROR");
 
+            model.addAttribute("highLightPostJob", true);
+            model.addAttribute("highLightPostList", false);
+            model.addAttribute("highLightSearch", false);
 
+            // make a Set of skill names, no duplicates in a set, user can pick from these, and also pick a rating
+            Set<String> skillNames = new LinkedHashSet<>();
+            skillNames.add("None Selected");
+
+            for (Skill skill : skillRepo.findAllByOrderBySkillAsc()) {
+                skillNames.add(skill.getSkill());
+            }
+
+            model.addAttribute("skillNames", skillNames);
             return "addjob";
         }
 
-//        if(checkedIds != null) {
-//            for (long id : checkedIds) {
-//                job.addSkill(skillRepo.findOne(id));
-//            }
-//        }
 
         if(!selectedSkillNameOne.equals("None Selected")) {
             job.addSkill(skillRepo.findBySkillIsAndRatingIs(selectedSkillNameOne, ratingOne));

@@ -39,7 +39,6 @@
                     <div class="form-group">
                         <label class="section-heading" for="minSalary">Min Salary</label>
                         <input id="minSalary" class="form-control" type="text" th:field="*{minSalary}" placeholder="$"/>
-                        <!-- I can note get @Temporal validation to work with messages.properties, so I just put it here -->
                         <p class="alert alert-danger" th:if="${#fields.hasErrors('minSalary')}" th:errors="*{minSalary}"></p>
                     </div>
 
