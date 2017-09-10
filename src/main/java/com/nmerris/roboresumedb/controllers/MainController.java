@@ -213,7 +213,8 @@ public class MainController {
 
 
     @PostMapping("/addjob")
-    public String addJobPost(@Valid @ModelAttribute("newJob") Job job, BindingResult bindingResult,
+    public String addJobPost(@Valid @ModelAttribute("newJob") Job job,
+                             BindingResult bindingResult,
                              Model model, Principal principal,
                              @RequestParam(value = "selectedSkillNameOne", required = false) String selectedSkillNameOne,
                              @RequestParam(value = "selectedSkillNameTwo", required = false) String selectedSkillNameTwo,
