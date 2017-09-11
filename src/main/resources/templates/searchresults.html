@@ -99,18 +99,17 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <!-- TODO list people who are associated with each school... just not enough time to do it all -->
-                                    <!--<th>Job Title</th>-->
-                                    <!--<th>Description</th>-->
-                                    <!--<th>Salary Range</th>-->
+                                    <th>Attendee</th>
+                                    <th>Major</th>
+                                    <th>Graduation Year</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <th:block th:each="item : ${searchResults}">
                                     <td th:text="${item.school}"></td>
-                                    <!--<td th:text="${item.title}"></td>-->
-                                    <!--<td th:text="${item.description}"></td>-->
-                                    <!--<td th:text="'$' + ${item.minSalary} + ' - $' + ${item.maxSalary}"></td>-->
+                                    <td th:text="${item.myPerson.nameFirst + ' ' + item.myPerson.nameLast}"></td>
+                                    <td th:text="${item.major}"></td>
+                                    <td th:text="${item.graduationYear}"></td>
                                 </th:block>
                             </tbody>
                         </table>

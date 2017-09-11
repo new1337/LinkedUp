@@ -82,11 +82,11 @@ public class MainController {
         return "redirect:/";
     }
 
-
-    @GetMapping("/logout")
-    public String logout() {
-        return "login";
-    }
+// never called
+//    @GetMapping("/logout")
+//    public String logout() {
+//        return "login";
+//    }
 
     // default route takes user to addperson, but since basic authentication security is enabled, they will have to
     // go through the login route first, then Spring will automatically take them to addperson
@@ -391,7 +391,6 @@ public class MainController {
         
         
         job.setMyPerson(personRepo.findByUsername(principal.getName()));
-
         jobRepo.save(job);
 
 
@@ -415,21 +414,6 @@ public class MainController {
         return "addjobconfirmation";
     }
 
-
-//    @GetMapping("/addperson")
-//    public String addPersonGet(Model model) {
-//        System.out.println("=============================================================== just entered /addperson GET");
-//
-//        // send the existing person to the form
-//        model.addAttribute("newPerson", personRepo.findOne(currPerson.getPersonId()));
-//
-//        NavBarState pageState = getPageLinkState();
-//        // set the navbar to highlight the appropriate link
-//        pageState.setHighlightPersonNav(true);
-//        model.addAttribute("pageState", pageState);
-//
-//        return "addperson";
-//    }
 
 
     @PostMapping("/addperson")

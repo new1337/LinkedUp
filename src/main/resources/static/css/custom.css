@@ -162,6 +162,8 @@ thead {
 
 }
 
+
+
 /* can end up with really wide tables if you don't truncate the cells contents */
 .truncate {
     overflow: hidden;

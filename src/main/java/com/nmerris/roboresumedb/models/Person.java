@@ -79,11 +79,14 @@ public class Person implements Comparable<Person> {
     }
 
 
-    // just compare by ids, could compare with anything we want
+    // just compare by last name, sort in ascending order
     @Override
     public int compareTo(Person other) {
-        return Long.compare(this.getId(), other.getId());
+        return getNameLast().compareToIgnoreCase(other.getNameLast());
     }
+
+
+
 
     // helper/convenience methods =================================================================================
     // add a single role to this Person

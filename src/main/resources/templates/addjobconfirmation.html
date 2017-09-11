@@ -31,7 +31,28 @@
                         </th:block>
                     </ul>
 
-                    <!-- display a table of -->
+                    <br/>
+
+                    <!-- display a table of seekers with skills that match the job just posted -->
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <caption><h3><b>Users who have any of the posted skills</b></h3></caption>
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="item : ${#lists.sort(peopleWithMatchedSkills)}">
+                                    <td th:text="${item.nameFirst}"></td>
+                                    <td th:text="${item.nameLast}"></td>
+                                    <td th:text="${item.email}"></td>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
                 <a class="btn btn-primary bold-input" th:href="@{~/addjob}"><b>+ Add Another</b></a>

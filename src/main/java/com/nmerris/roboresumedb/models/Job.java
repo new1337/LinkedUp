@@ -47,7 +47,6 @@ public class Job implements Comparable<Job> {
     private Person myPerson;
 
 
-    // just compare by ids, could compare with anything we want
     @Override
     public int compareTo(Job other) {
         // returns negative number is this.getId < other.getId, 0 if equal
